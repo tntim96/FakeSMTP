@@ -4,10 +4,12 @@ import com.nilhcem.fakesmtp.core.Configuration;
 import com.nilhcem.fakesmtp.core.test.TestConfig;
 import org.apache.commons.mail.*;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Ignore("This needs to be run manually with a running instance of FakeSMTP")
 public final class SendEmailsIT {
 
 	private static final Logger logger = LoggerFactory.getLogger(SendEmailsIT.class);

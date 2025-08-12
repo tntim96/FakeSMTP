@@ -27,9 +27,9 @@
 
 		<!-- SubEtha SMTP: easy-to-use server-side SMTP library for Java -->
 		<dependency>
-		    <groupId>org.subethamail</groupId>
+		    <groupId>com.github.davidmoten</groupId>
 		    <artifactId>subethasmtp</artifactId>
-		    <version>3.1.7</version>
+		    <version>4.0.1</version>
 		</dependency>
 
 		<!-- Logging: slf4j + logback -->
@@ -90,8 +90,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>8</source>
+					<target>8</target>
 				</configuration>
 			</plugin>
 

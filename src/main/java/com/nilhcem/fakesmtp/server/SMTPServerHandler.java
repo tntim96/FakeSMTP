@@ -37,11 +37,14 @@ public enum SMTPServerHandler {
 	public void startServer(int port, InetAddress bindAddress) throws BindPortException, OutOfRangePortException {
 		LOGGER.debug("Starting server on port {}", port);
 		try {
-                        smtpServer = new SMTPServer.Builder()
+                        SMTPServer.Builder builder = new SMTPServer.Builder()
                             .authenticationHandlerFactory(new SMTPAuthHandlerFactory())
                             .simpleMessageListener(myListener)
-                            .bindAddress(bindAddress)
-                            .port(port)
+                            .port(port);
+                        if (bindAddress != null) {
+                              builder.bindAddress(bindAddress);
+                        }
+                        smtpServer = builder
                             .build();
 			smtpServer.start();
 		} catch (RuntimeException exception) {

@@ -1,12 +1,16 @@
 package com.nilhcem.fakesmtp.model;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.InvalidHostException;
 import com.nilhcem.fakesmtp.core.exception.InvalidPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
 import com.nilhcem.fakesmtp.core.test.TestConfig;
+import org.junit.Test;
 
 public class UIModelTest {
 	@Test
@@ -30,11 +34,13 @@ public class UIModelTest {
 	@Test(expected = InvalidHostException.class)
 	public void testInvalidHost() throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
 		UIModel.INSTANCE.setHost("INVALID");
+                UIModel.INSTANCE.setPort(Integer.toString(TestConfig.PORT_UNIT_TESTS));
 		UIModel.INSTANCE.toggleButton();
 	}
 
 	@Test
 	public void testIsStarted() throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
+                UIModel.INSTANCE.setHost("127.0.0.1");
 		UIModel.INSTANCE.setPort(Integer.toString(TestConfig.PORT_UNIT_TESTS));
 		assertFalse(UIModel.INSTANCE.isStarted());
 

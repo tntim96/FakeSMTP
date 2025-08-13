@@ -4,7 +4,6 @@ import java.net.InetAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
@@ -21,7 +20,7 @@ public enum SMTPServerHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SMTPServerHandler.class);
 	private final MailSaver mailSaver = new MailSaver();
 	private final MailListener myListener = new MailListener(mailSaver);
-	private final SMTPServer smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(myListener), new SMTPAuthHandlerFactory());
+	private SMTPServer smtpServer;
 
 	SMTPServerHandler() {
 	}
@@ -38,8 +37,12 @@ public enum SMTPServerHandler {
 	public void startServer(int port, InetAddress bindAddress) throws BindPortException, OutOfRangePortException {
 		LOGGER.debug("Starting server on port {}", port);
 		try {
-			smtpServer.setBindAddress(bindAddress);
-			smtpServer.setPort(port);
+                        smtpServer = new SMTPServer.Builder()
+                            .authenticationHandlerFactory(new SMTPAuthHandlerFactory())
+                            .simpleMessageListener(myListener)
+                            .bindAddress(bindAddress)
+                            .port(port)
+                            .build();
 			smtpServer.start();
 		} catch (RuntimeException exception) {
 			if (exception.getMessage().contains("BindException")) { // Can't open port

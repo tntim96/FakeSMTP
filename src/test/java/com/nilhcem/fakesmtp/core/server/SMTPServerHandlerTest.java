@@ -6,6 +6,10 @@ import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
 import com.nilhcem.fakesmtp.server.SMTPServerHandler;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+
 public class SMTPServerHandlerTest {
 	@Test
 	public void uniqueInstance() {
@@ -15,8 +19,8 @@ public class SMTPServerHandlerTest {
 	}
 
 	@Test(expected = OutOfRangePortException.class)
-	public void testOutOfRangePort() throws BindPortException, OutOfRangePortException {
-		SMTPServerHandler.INSTANCE.startServer(9999999, null);
+	public void testOutOfRangePort() throws BindPortException, OutOfRangePortException, UnknownHostException {
+		SMTPServerHandler.INSTANCE.startServer(9999999, InetAddress.getLocalHost());
 	}
 
 	@Test

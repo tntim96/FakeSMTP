@@ -29,7 +29,7 @@
 		<dependency>
 		    <groupId>com.github.davidmoten</groupId>
 		    <artifactId>subethasmtp</artifactId>
-		    <version>4.0.1</version>
+		    <version>5.2.8</version>
 		</dependency>
 
 		<!-- Logging: slf4j + logback -->

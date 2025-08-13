@@ -1,6 +1,7 @@
 package com.nilhcem.fakesmtp.server;
 
 import org.subethamail.smtp.AuthenticationHandler;
+import org.subethamail.smtp.MessageContext;
 
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ import java.util.Optional;
 	 * @param clientInput The client's input, eg "AUTH PLAIN dGVzdAB0ZXN0ADEyMzQ="
 	 */
 	@Override
-	public Optional<String> auth(String clientInput) {
+	public Optional<String> auth(String clientInput, MessageContext messageContext) {
 		String prompt;
 
 		if (++pass == 1) {

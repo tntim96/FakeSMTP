@@ -29,7 +29,12 @@
 		<dependency>
 		    <groupId>com.github.davidmoten</groupId>
 		    <artifactId>subethasmtp</artifactId>
-		    <version>5.2.8</version>
+		    <version>6.0.7</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.7</version>
 		</dependency>
 
 		<!-- Logging: slf4j + logback -->
@@ -78,6 +83,12 @@
 		    <version>1.6.0</version>
 		    <scope>test</scope>
 		</dependency>
+                <dependency>
+                  <groupId>com.sun.mail</groupId>
+                  <artifactId>jakarta.mail</artifactId>
+                  <version>1.6.7</version>
+                  <scope>test</scope>
+                </dependency>
 	</dependencies>
 
 	<build>

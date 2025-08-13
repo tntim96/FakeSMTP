@@ -16,6 +16,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import org.slf4j.Logger;
+import org.subethamail.smtp.server.SMTPServer;
+
 
 /**
  * Provides the main window of the application.
@@ -115,8 +117,9 @@ public final class MainFrame {
 			LOGGER.error("Could not save configuration", ex);
 		}
 		// Check for SMTP server running and stop it
-		if (SMTPServerHandler.INSTANCE.getSmtpServer().isRunning()) {
-			SMTPServerHandler.INSTANCE.getSmtpServer().stop();
+		SMTPServer smtpServer = SMTPServerHandler.INSTANCE.getSmtpServer();
+		if (smtpServer != null && smtpServer.isRunning()) {
+			smtpServer.stop();
 		}
 
 		mainFrame.dispose();

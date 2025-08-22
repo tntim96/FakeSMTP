@@ -1,7 +1,6 @@
 package com.nilhcem.fakesmtp;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -75,9 +74,13 @@ public final class FakeSMTP {
 				@Override
 				public void run() {
 					try {
-						URL envelopeImage = getClass().getResource(Configuration.INSTANCE.get("application.icon.path"));
-						if (envelopeImage != null) {
-							Application.getApplication().setDockIconImage(Toolkit.getDefaultToolkit().getImage(envelopeImage));
+						URL iconUrl = getClass().getResource(Configuration.INSTANCE.get("application.icon.path"));
+						if (iconUrl != null && !GraphicsEnvironment.isHeadless() && Taskbar.isTaskbarSupported()) {
+							Image img = Toolkit.getDefaultToolkit().getImage(iconUrl);
+							Taskbar taskbar = Taskbar.getTaskbar();
+							if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+								taskbar.setIconImage(img);   // works on macOS Dock, Windows taskbar, many Linux DEs
+							}
 						}
 					} catch (RuntimeException e) {
 						LOGGER.debug("Error: {} - This is probably because we run on a non-Mac platform and these components are not implemented", e.getMessage());

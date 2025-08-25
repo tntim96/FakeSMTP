@@ -4,7 +4,7 @@ FakeSMTP
 FakeSMTP is a Free Fake SMTP Server with GUI for testing emails in applications easily.
 It is written in Java.
 
-<img src="http://nilhcem.github.com/FakeSMTP/images/screenshot_mac.png" width="664" height="463" />
+<img src="https://tntim96.github.io/FakeSMTP/images/screenshot_mac.png" width="664" height="463" />
 
 Configure your application to use `localhost` as your SMTP server, and all
 emails will be intercepted and displayed in this software.
@@ -124,7 +124,7 @@ Usage on Docker
 
 * Run distributed version: [Dockerfile](https://github.com/Nilhcem/FakeSMTP/blob/master/Dockerfile)
 
-      `docker build -t="mail" github.com/Nilhcem/FakeSMTP`
+      `docker build -t="mail" github.com/tntim96/FakeSMTP`
 
       `docker run -ti -p 250:25 --privileged=true -v /mail:/output mail`
 
@@ -133,7 +133,7 @@ Usage on Docker
 
 Get sources from GitHub: [Dockerfile](https://github.com/Nilhcem/FakeSMTP/blob/master/src/main/docker/Dockerfile)
 
-    git clone https://github.com/Nilhcem/FakeSMTP
+    git clone https://github.com/tntim96/FakeSMTP
     cd FakeSMTP
 
 Build the docker image

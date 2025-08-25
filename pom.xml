@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.nilhcem.fakesmtp</groupId>
+	<groupId>ccom.github.tntim96.fakesmtp</groupId>
 	<artifactId>fakesmtp</artifactId>
 	<version>2.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Fake SMTP</name>
 	<description>Dummy SMTP server for testing</description>
-	<url>https://github.com/Nilhcem/FakeSMTP</url>
+	<url>https://github.com/tntim96/FakeSMTP</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -109,7 +109,7 @@
 		<finalName>fakeSMTP-${project.version}</finalName>
 
 		<plugins>
-			<!-- Use JDK 1.6 -->
+			<!-- Use JDK 11 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -165,117 +165,10 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- Create a site using "$ mvn site" -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.4</version>
-				<configuration>
-					<reportPlugins>
-						<!-- Information about the project -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-project-info-reports-plugin</artifactId>
-							<version>2.8</version>
-							<reports>
-								<report>license</report>
-								<report>project-team</report>
-								<report>dependencies</report>
-								<report>summary</report>
-							</reports>
-							<configuration>
-								<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-								<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-							</configuration>
-						</plugin>
-
-						<!-- Unit test reports -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-surefire-report-plugin</artifactId>
-							<version>2.18.1</version>
-						</plugin>
-
-						<!-- Javadoc -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-javadoc-plugin</artifactId>
-							<version>2.10.3</version>
-							<reportSets>
-								<reportSet>
-									<reports>
-										<report>javadoc</report>
-									</reports>
-								</reportSet>
-							</reportSets>
-						</plugin>
-
-						<!-- Findbugs -->
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>findbugs-maven-plugin</artifactId>
-							<version>3.0.1</version>
-							<configuration>
-								<linkXref>true</linkXref>
-								<threshold>High</threshold>
-								<effort>Default</effort>
-							</configuration>
-						</plugin>
-
-						<!-- PMD -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-pmd-plugin</artifactId>
-							<version>3.4</version>
-							<configuration>
-								<linkXref>true</linkXref>
-								<sourceEncoding>utf-8</sourceEncoding>
-								<targetJdk>1.6</targetJdk>
-							</configuration>
-						</plugin>
-
-						<!-- Checkstyle -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>2.15</version>
-							<configuration>
-								<linkXref>true</linkXref>
-								<sourceEncoding>UTF-8</sourceEncoding>
-								<configLocation>${project.basedir}/src/main/config/checkstyle/custom_checks.xml</configLocation>
-							</configuration>
-						</plugin>
-
-						<!-- Cobertura -->
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>cobertura-maven-plugin</artifactId>
-							<version>2.6</version>
-						</plugin>
-
-						<!-- JDepend -->
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>jdepend-maven-plugin</artifactId>
-							<version>2.0</version>
-						</plugin>
-
-						<!-- Generates a report on various tags found in the code, like @todo, TODO, @fixme, //FIXME tags. -->
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>taglist-maven-plugin</artifactId>
-							<version>2.4</version>
-						</plugin>
-
-						<!-- JXR: Browse the source-code from the website -->
-						<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-jxr-plugin</artifactId>
-							<version>2.5</version>
-						</plugin>
-					</reportPlugins>
-				</configuration>
+				<version>3.21.0</version>
 			</plugin>
 
 			<!-- Docker -->
@@ -295,11 +188,142 @@
 					</resources>
 				</configuration>
 			</plugin>
+                  <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.13</version>
+                    <executions>
+                      <!-- Attach agent to unit tests -->
+                      <execution>
+                        <goals><goal>prepare-agent</goal></goals>
+                      </execution>
+
+                      <!-- Generate coverage report at verify -->
+                      <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals><goal>report</goal></goals>
+                      </execution>
+
+                      <!-- Enforce minimum coverage -->
+                      <execution>
+                        <id>check</id>
+                        <goals><goal>check</goal></goals>
+                        <configuration>
+                          <rules>
+                            <rule>
+                              <element>BUNDLE</element>
+                              <limits>
+                                <limit>
+                                  <counter>BRANCH</counter>
+                                  <value>COVEREDRATIO</value>
+                                  <minimum>0.15</minimum>
+                                </limit>
+                              </limits>
+                            </rule>
+                          </rules>
+                        </configuration>
+                      </execution>
+                    </executions>
+                  </plugin>
 		</plugins>
 	</build>
 
+        <reporting>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-report-plugin</artifactId>
+              <version>3.5.3</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>3.11.3</version>
+              <reportSets>
+                <reportSet>
+                  <reports>
+                    <report>javadoc</report>
+                  </reports>
+                </reportSet>
+              </reportSets>
+            </plugin>
+
+            <!-- Findbugs -->
+            <plugin>
+              <groupId>com.github.spotbugs</groupId>
+              <artifactId>spotbugs-maven-plugin</artifactId>
+              <version>4.9.3.2</version>
+              <configuration>
+                <threshold>High</threshold>
+                <effort>Default</effort>
+              </configuration>
+            </plugin>
+
+            <!-- PMD -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-pmd-plugin</artifactId>
+              <version>3.27.0</version>
+              <configuration>
+                <inputEncoding>UTF-8</inputEncoding>
+                <targetJdk>11</targetJdk>
+              </configuration>
+            </plugin>
+
+            <!-- Checkstyle -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-checkstyle-plugin</artifactId>
+              <version>3.6.0</version>
+              <configuration>
+                <configLocation>${project.basedir}/src/main/config/checkstyle/custom_checks.xml</configLocation>
+              </configuration>
+            </plugin>
+
+            <!-- JDepend -->
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>jdepend-maven-plugin</artifactId>
+              <version>2.1</version>
+            </plugin>
+
+            <!-- Generates a report on various tags found in the code, like @todo, TODO, @fixme, //FIXME tags. -->
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>taglist-maven-plugin</artifactId>
+              <version>3.2.1</version>
+            </plugin>
+
+            <!-- JXR: Browse the source-code from the website -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jxr-plugin</artifactId>
+              <version>3.6.0</version>
+            </plugin>
+
+            <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <version>0.8.13</version>
+              <configuration>
+                <goal>report</goal>
+              </configuration>
+            </plugin>
+          </plugins>
+        </reporting>
+
 	<!-- List the core committers + contributors -->
 	<developers>
+		<developer>
+			<id>tntim96</id>
+			<name>Tim</name>
+			<email>tntim96@gmail.com</email>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+10</timezone>
+		</developer>
 		<developer>
 			<id>nilhcem</id>
 			<name>Gautier MECHLING</name>

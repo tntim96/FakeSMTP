@@ -1,9 +1,9 @@
  -----
  FakeSMTP - Dummy SMTP server for developers
  -----
- Nilhcem
+ tntim96
  -----
- May 2015
+ August 2025
 
 Overview
 
@@ -12,7 +12,7 @@ Configure your application to use "localhost" as your SMTP server, and all email
 
 [./images/screenshot_mac.png] Screenshot
 
- FakeSMTP uses {{{http://code.google.com/p/subethasmtp/}SubEtha SMTP}}: an easy-to-use server-side SMTP library for Java.\
+ FakeSMTP uses {{{http://github.com/davidmoten/subethasmtp/}SubEtha SMTP}}: an easy-to-use server-side SMTP library for Java.\
 FakeSMTP is free to use for commercial and non-commercial projects and the source code is provided.\
 It is licensed under the very free BSD or GPL license, whichever you prefer.
 
@@ -62,19 +62,19 @@ the following example will autostart the SMTP server on the port 2525 and bound 
 
 * Usage on Docker
 
- * Run distributed version: {{{https://github.com/Nilhcem/FakeSMTP/blob/master/Dockerfile}Dockerfile}}
+ * Run distributed version: {{{https://github.com/tntim96/FakeSMTP/blob/master/Dockerfile}Dockerfile}}
 
 +--
- docker build -t="mail" github.com/Nilhcem/FakeSMTP
+ docker build -t="mail" github.com/tntim96/FakeSMTP
  docker run -ti -p 250:25 --privileged=true -v /mail:/output mail
 +--
 
  * Build from source
 
- Get sources from GitHub: {{{https://github.com/Nilhcem/FakeSMTP/blob/master/src/main/docker/Dockerfile}Dockerfile}}
+ Get sources from GitHub: {{{https://github.com/tntim96/FakeSMTP/blob/master/src/main/docker/Dockerfile}Dockerfile}}
 
 +--
- git clone https://github.com/Nilhcem/FakeSMTP
+ git clone https://github.com/tntim96/FakeSMTP
  cd FakeSMTP
 +--
 

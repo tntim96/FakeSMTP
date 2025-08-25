@@ -2,7 +2,7 @@ FROM java:8
 
 RUN mkdir -p /output
 
-ADD http://nilhcem.github.com/FakeSMTP/downloads/fakeSMTP-latest.zip /fakeSMTP-latest.zip
+ADD https://tntim96.github.io/FakeSMTP/downloads/fakeSMTP-latest.zip /fakeSMTP-latest.zip
 
 RUN unzip /fakeSMTP-latest.zip
 

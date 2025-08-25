@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>ClearAllButton xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -30,9 +30,9 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * @author Nilhcem</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * @since 1.0</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html">ClearAllButton</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="ClearAllButton" href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html#ClearAllButton">ClearAllButton</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a href="../../../../../com/nilhcem/fakesmtp/core/I18n.html">I18n</a> i18n = I18n.INSTANCE;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="I18n" href="../../../../../com/nilhcem/fakesmtp/core/I18n.html#I18n">I18n</a> i18n = I18n.INSTANCE;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JButton button = <strong class="jxr_keyword">new</strong> JButton(i18n.get(<span class="jxr_string">"clearall.button"</span>));
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * If yes, emails will be deleted from the file system.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html">ClearAllButton</a>() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">public</strong> <a name="ClearAllButton" href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html#ClearAllButton">ClearAllButton</a>() {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		button.setToolTipText(i18n.get(<span class="jxr_string">"clearall.tooltip"</span>));
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		button.addActionListener(<strong class="jxr_keyword">new</strong> ActionListener() {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  			@Override
@@ -86,13 +86,13 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Override
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(Observable o, Object arg) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (o instanceof MailSaver &amp;&amp; !button.isEnabled()) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="MailSaver" href="../../../../../com/nilhcem/fakesmtp/server/MailSaver.html#MailSaver">MailSaver</a> &amp;&amp; !button.isEnabled()) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			button.setEnabled(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2014. All rights reserved.</div>
+<div id="footer">© 2025</div>
 </body>
 </html>

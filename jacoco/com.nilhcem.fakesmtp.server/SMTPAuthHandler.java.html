@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SMTPAuthHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.server</a> &gt; <span class="el_source">SMTPAuthHandler.java</span></div><h1>SMTPAuthHandler.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.server;
+
+import org.subethamail.smtp.AuthenticationHandler;
+import org.subethamail.smtp.MessageContext;
+
+import java.util.Optional;
+
+
+/**
+ * Simulates an authentication handler to allow capturing emails that are set up with login authentication.
+ *
+ * @author jasonpenny
+ * @since 1.2
+ */
+<span class="nc" id="L15">/*package*/ final class SMTPAuthHandler implements AuthenticationHandler {</span>
+	private static final String USER_IDENTITY = &quot;User&quot;;
+	private static final String PROMPT_USERNAME = &quot;334 VXNlcm5hbWU6&quot;; // VXNlcm5hbWU6 is base64 for &quot;Username:&quot;
+	private static final String PROMPT_PASSWORD = &quot;334 UGFzc3dvcmQ6&quot;; // UGFzc3dvcmQ6 is base64 for &quot;Password:&quot;
+
+<span class="nc" id="L20">	private int pass = 0;</span>
+
+	/**
+	 * Simulates an authentication process.
+	 * &lt;p&gt;
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;first prompts for username;&lt;/li&gt;
+	 *   &lt;li&gt;then, prompts for password;&lt;/li&gt;
+	 *   &lt;li&gt;finally, returns {@code null} to finish the authentication process;&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * &lt;/p&gt;
+	 *
+	 * @return &lt;code&gt;null&lt;/code&gt; if the authentication process is finished, otherwise a string to hand back to the client.
+	 * @param clientInput The client's input, eg &quot;AUTH PLAIN dGVzdAB0ZXN0ADEyMzQ=&quot;
+	 */
+	@Override
+	public Optional&lt;String&gt; auth(String clientInput, MessageContext messageContext) {
+		String prompt;
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">		if (++pass == 1) {</span>
+<span class="nc" id="L40">			prompt = SMTPAuthHandler.PROMPT_USERNAME;</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		} else if (pass == 2) {</span>
+<span class="nc" id="L42">			prompt = SMTPAuthHandler.PROMPT_PASSWORD;</span>
+		} else {
+<span class="nc" id="L44">			pass = 0;</span>
+<span class="nc" id="L45">			return Optional.empty();</span>
+		}
+<span class="nc" id="L47">		return Optional.of(prompt);</span>
+	}
+
+	/**
+	 * If the authentication process was successful, this returns the identity
+	 * of the user. The type defining the identity can vary depending on the
+	 * authentication mechanism used, but typically this returns a String username.
+	 * If authentication was not successful, the return value is undefined.
+	 */
+	@Override
+	public Object getIdentity() {
+<span class="nc" id="L58">		return SMTPAuthHandler.USER_IDENTITY;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

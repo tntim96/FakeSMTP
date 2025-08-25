@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>SaveMsgField xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * @author Nilhcem</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * @since 1.0</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/SaveMsgField.html">SaveMsgField</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="SaveMsgField" href="../../../../../com/nilhcem/fakesmtp/gui/info/SaveMsgField.html#SaveMsgField">SaveMsgField</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JTextField saveMsgField = <strong class="jxr_keyword">new</strong> JTextField(UIModel.INSTANCE.getSavePath());
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">	 * Instead, he can use the directory chooser dialog to select the path he wants.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/SaveMsgField.html">SaveMsgField</a>() {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <a name="SaveMsgField" href="../../../../../com/nilhcem/fakesmtp/gui/info/SaveMsgField.html#SaveMsgField">SaveMsgField</a>() {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		saveMsgField.setToolTipText(I18n.INSTANCE.get(<span class="jxr_string">"savemsgfield.tooltip"</span>));
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<em class="jxr_comment">// Disable edition but keep the same background color</em>
@@ -98,13 +98,13 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@Override
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(Observable o, Object arg) {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">if</strong> (o instanceof DirChooser) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="DirChooser" href="../../../../../com/nilhcem/fakesmtp/gui/DirChooser.html#DirChooser">DirChooser</a>) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			saveMsgField.setText(UIModel.INSTANCE.getSavePath());
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		}
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2014. All rights reserved.</div>
+<div id="footer">© 2025</div>
 </body>
 </html>

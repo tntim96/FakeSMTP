@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirChooser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui</a> &gt; <span class="el_source">DirChooser.java</span></div><h1>DirChooser.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui;
+
+import java.awt.Component;
+import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
+import javax.swing.JFileChooser;
+import com.nilhcem.fakesmtp.core.Configuration;
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.gui.info.SaveMsgField;
+import com.nilhcem.fakesmtp.model.UIModel;
+
+/**
+ * Provides a graphical directory chooser dialog.
+ * &lt;p&gt;
+ * The directory chooser is used to select the folder where emails will be saved in.&lt;br&gt;
+ * It can be launched from the menu bar, or from the main panel.
+ * &lt;/p&gt;
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class DirChooser extends Observable implements Observer {
+
+<span class="nc" id="L25">	private final JFileChooser dirChooser = new JFileChooser();</span>
+<span class="nc" id="L26">	private Component parent = null;</span>
+
+	/**
+	 * Creates a {@code JFileChooser} component and sets it to be for directories only.
+	 *
+	 * @param parent the component from where the chooser will be launched &lt;i&gt;(should be the main panel of the application)&lt;/i&gt;.
+	 */
+<span class="nc" id="L33">	public DirChooser(Component parent) {</span>
+<span class="nc" id="L34">		this.parent = parent;</span>
+<span class="nc" id="L35">		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);</span>
+<span class="nc" id="L36">		dirChooser.setDialogTitle(String.format(I18n.INSTANCE.get(&quot;dirchooser.title&quot;),</span>
+<span class="nc" id="L37">			Configuration.INSTANCE.get(&quot;application.name&quot;)));</span>
+<span class="nc" id="L38">		dirChooser.setApproveButtonText(I18n.INSTANCE.get(&quot;dirchooser.approve.btn&quot;));</span>
+<span class="nc" id="L39">	}</span>
+
+	/**
+	 * Opens the folder selection.
+	 * &lt;p&gt;
+	 * This method will be called by an {@code Observable} element:
+     * &lt;/p&gt;
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;The {@link MenuBar};&lt;/li&gt;
+	 *   &lt;li&gt;Or the {@link SaveMsgField}.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 *
+	 * @param o the observable element which will notify this class.
+	 * @param arg optional parameters (not used).
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+<span class="nc bnc" id="L56" title="All 4 branches missed.">		if (o instanceof MenuBar || o instanceof SaveMsgField) {</span>
+<span class="nc" id="L57">			openFolderSelection();</span>
+		}
+<span class="nc" id="L59">	}</span>
+
+	/**
+	 * Opens the folder selection dialog and notify observers once the directory is selected.
+	 * &lt;p&gt;
+	 * The only observer notified is the {@link SaveMsgField}.
+	 * &lt;/p&gt;
+	 */
+	private void openFolderSelection() {
+<span class="nc" id="L68">		File filePath = new File(Configuration.INSTANCE.get(&quot;emails.default.dir&quot;));</span>
+<span class="nc" id="L69">		dirChooser.setCurrentDirectory(filePath);</span>
+
+<span class="nc" id="L71">		int result = dirChooser.showOpenDialog(parent);</span>
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		if (result == JFileChooser.APPROVE_OPTION) {</span>
+<span class="nc" id="L74">			File selectedDir = dirChooser.getSelectedFile();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if (selectedDir != null) {</span>
+<span class="nc" id="L76">				UIModel.INSTANCE.setSavePath(selectedDir.getAbsolutePath());</span>
+<span class="nc" id="L77">				setChanged();</span>
+<span class="nc" id="L78">				notifyObservers();</span>
+			}
+		}
+<span class="nc" id="L81">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

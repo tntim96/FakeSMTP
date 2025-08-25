@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SMTPAuthHandlerFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.server</a> &gt; <span class="el_source">SMTPAuthHandlerFactory.java</span></div><h1>SMTPAuthHandlerFactory.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.server;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.subethamail.smtp.AuthenticationHandler;
+import org.subethamail.smtp.AuthenticationHandlerFactory;
+
+/**
+ * The factory interface for creating authentication handlers.
+ *
+ * @author jasonpenny
+ * @since 1.2
+ */
+<span class="fc" id="L14">/*package*/ final class SMTPAuthHandlerFactory implements AuthenticationHandlerFactory {</span>
+	private static final String LOGIN_MECHANISM = &quot;LOGIN&quot;;
+
+	@Override
+	public AuthenticationHandler create() {
+<span class="nc" id="L19">		return new SMTPAuthHandler();</span>
+	}
+
+	@Override
+	public List&lt;String&gt; getAuthenticationMechanisms() {
+<span class="nc" id="L24">		List&lt;String&gt; result = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L25">		result.add(SMTPAuthHandlerFactory.LOGIN_MECHANISM);</span>
+<span class="nc" id="L26">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

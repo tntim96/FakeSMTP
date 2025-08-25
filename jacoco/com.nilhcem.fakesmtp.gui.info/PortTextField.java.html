@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PortTextField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui.info</a> &gt; <span class="el_source">PortTextField.java</span></div><h1>PortTextField.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui.info;
+
+import com.nilhcem.fakesmtp.core.Configuration;
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.model.UIModel;
+
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * Text field in which will be written the desired SMTP port.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class PortTextField extends Observable implements Observer {
+
+<span class="nc" id="L23">	private final JTextField portTextField = new JTextField();</span>
+
+	/**
+	 * Creates the port field object and adds a listener on change to alert the presentation model.
+	 * &lt;p&gt;
+	 * The default port's value is defined in the configuration.properties file.&lt;br&gt;
+	 * Each time the port is modified, the port from the {@link UIModel} will be reset.
+	 * &lt;/p&gt;
+	 */
+<span class="nc" id="L32">	public PortTextField() {</span>
+<span class="nc" id="L33">		portTextField.setToolTipText(I18n.INSTANCE.get(&quot;porttextfield.tooltip&quot;));</span>
+<span class="nc" id="L34">		portTextField.getDocument().addDocumentListener(new DocumentListener() {</span>
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+<span class="nc" id="L37">				warn();</span>
+<span class="nc" id="L38">			}</span>
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+<span class="nc" id="L42">				warn();</span>
+<span class="nc" id="L43">			}</span>
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+<span class="nc" id="L47">				warn();</span>
+<span class="nc" id="L48">			}</span>
+
+			private void warn() {
+<span class="nc" id="L51">				UIModel.INSTANCE.setPort(portTextField.getText());</span>
+<span class="nc" id="L52">			}</span>
+		});
+
+<span class="nc" id="L55">		portTextField.setText(Configuration.INSTANCE.get(&quot;smtp.default.port&quot;));</span>
+<span class="nc" id="L56">		portTextField.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L59">				setChanged();</span>
+<span class="nc" id="L60">				notifyObservers();</span>
+<span class="nc" id="L61">			}</span>
+		});
+<span class="nc" id="L63">	}</span>
+
+	/**
+	 * Returns the JTextField object.
+	 *
+	 * @return the JTextField object.
+	 */
+	public JTextField get() {
+<span class="nc" id="L71">		return portTextField;</span>
+	}
+
+	/**
+	 * Sets the specified port in the text field only if this latter is not {@code null}.
+	 *
+	 * @param portStr the port to set.
+	 */
+	public void setText(String portStr) {
+<span class="nc bnc" id="L80" title="All 4 branches missed.">		if (portStr != null &amp;&amp; !portStr.isEmpty()) {</span>
+<span class="nc" id="L81">			portTextField.setText(portStr);</span>
+		}
+<span class="nc" id="L83">	}</span>
+
+	/**
+	 * Enables or disables the port text field.
+	 * &lt;p&gt;
+	 * When the element will receive an action from the {@link StartServerButton} object,
+	 * it will enable or disable the port, so that the user can't modify it
+	 * when the server is already launched.
+	 * &lt;/p&gt;
+	 *
+	 * @param o the observable element which will notify this class.
+	 * @param arg optional parameters (not used).
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if (o instanceof StartServerButton) {</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">			portTextField.setEnabled(!UIModel.INSTANCE.isStarted());</span>
+		}
+<span class="nc" id="L101">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

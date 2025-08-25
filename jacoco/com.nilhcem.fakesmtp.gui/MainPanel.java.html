@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainPanel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui</a> &gt; <span class="el_source">MainPanel.java</span></div><h1>MainPanel.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui;
+
+import com.nilhcem.fakesmtp.core.ArgsHandler;
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.gui.info.ClearAllButton;
+import com.nilhcem.fakesmtp.gui.info.NbReceivedLabel;
+import com.nilhcem.fakesmtp.gui.info.PortTextField;
+import com.nilhcem.fakesmtp.gui.info.SaveMsgField;
+import com.nilhcem.fakesmtp.gui.info.StartServerButton;
+import com.nilhcem.fakesmtp.gui.tab.LastMailPane;
+import com.nilhcem.fakesmtp.gui.tab.LogsPane;
+import com.nilhcem.fakesmtp.gui.tab.MailsListPane;
+import com.nilhcem.fakesmtp.server.MailSaver;
+import com.nilhcem.fakesmtp.server.SMTPServerHandler;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import java.util.Observable;
+
+/**
+ * Provides the main panel of the application, which will contain all the components.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class MainPanel {
+	// I18n
+<span class="nc" id="L30">	private final I18n i18n = I18n.INSTANCE;</span>
+
+	// Panel and layout
+<span class="nc" id="L33">	private final MigLayout layout = new MigLayout(</span>
+		&quot;&quot;, // Layout constraints
+		&quot;[] 10 [] [] [grow,fill]&quot;, // Column constraints
+		&quot;[] [] 5 [] 5 [grow,fill] []&quot;); // Row constraints
+<span class="nc" id="L37">	private final JPanel mainPanel = new JPanel(layout);</span>
+
+	// Directory chooser
+<span class="nc" id="L40">	private final DirChooser dirChooser = new DirChooser(mainPanel);</span>
+
+	// Port
+<span class="nc" id="L43">	private final JLabel portLabel = new JLabel(i18n.get(&quot;mainpanel.listening.port&quot;));</span>
+<span class="nc" id="L44">	private final PortTextField portText = new PortTextField();</span>
+<span class="nc" id="L45">	private final StartServerButton startServerBtn = new StartServerButton();</span>
+
+	// Messages received
+<span class="nc" id="L48">	private final JLabel receivedLabel = new JLabel(i18n.get(&quot;mainpanel.messages.received&quot;));</span>
+<span class="nc" id="L49">	private final NbReceivedLabel nbReceivedLabel = new NbReceivedLabel();</span>
+
+	// Save incoming messages to
+<span class="nc" id="L52">	private final JLabel saveMessages = new JLabel(i18n.get(&quot;mainpanel.save.messages&quot;));</span>
+<span class="nc" id="L53">	private final SaveMsgField saveMsgTextField = new SaveMsgField();</span>
+
+	// Tab pane
+<span class="nc" id="L56">	private final JTabbedPane tabbedPane = new JTabbedPane();</span>
+<span class="nc" id="L57">	private final LogsPane logsPane = new LogsPane();</span>
+<span class="nc" id="L58">	private final MailsListPane mailsListPane = new MailsListPane();</span>
+<span class="nc" id="L59">	private final LastMailPane lastMailPane = new LastMailPane();</span>
+
+	// Clear all
+<span class="nc" id="L62">	private final ClearAllButton clearAll = new ClearAllButton();</span>
+
+	/**
+	 * Creates the main panel.
+	 * &lt;p&gt;
+	 * To create the main panel, the method will first have to handle components interactions by
+	 * adding observers to observable elements, then the method will build the GUI by placing all the
+	 * components in the main panel.
+	 * &lt;/p&gt;
+	 *
+	 * @param menu the menu bar which will notify the directory file chooser.
+	 */
+<span class="nc" id="L74">	public MainPanel(Observable menu) {</span>
+<span class="nc" id="L75">		assignLabelsToFields();</span>
+<span class="nc" id="L76">		addObservers(menu);</span>
+<span class="nc" id="L77">		buildGUI();</span>
+<span class="nc" id="L78">		checkArgs();</span>
+<span class="nc" id="L79">	}</span>
+
+	/**
+	 * Returns the JPanel object.
+	 *
+	 * @return the JPanel object.
+	 */
+	public JPanel get() {
+<span class="nc" id="L87">		return mainPanel;</span>
+	}
+
+	/**
+	 * Handles components interactions by adding observers to observable elements.
+	 * &lt;p&gt;
+	 * The interactions are the following:
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;Open the directory chooser when clicking on the menu/the save message field;&lt;/li&gt;
+	 *   &lt;li&gt;Enable/Disable the port field when the server starts;&lt;/li&gt;
+	 *   &lt;li&gt;Set the new directory, once a folder is selected;&lt;li&gt;
+	 *   &lt;li&gt;Notify components when a message is received;&lt;/li&gt;
+	 *   &lt;li&gt;Notify components when the user wants to clear them all.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * &lt;/p&gt;
+	 *
+	 * @param menu the menu bar which will notify the directory file chooser.
+	 */
+	private void addObservers(Observable menu) {
+		// When we want to select a directory
+<span class="nc" id="L107">		menu.addObserver(dirChooser);</span>
+<span class="nc" id="L108">		saveMsgTextField.addObserver(dirChooser);</span>
+
+		// When we click on &quot;start server&quot; button
+<span class="nc" id="L111">		startServerBtn.addObserver(portText);</span>
+
+		// When we press &quot;Enter&quot; on the PortTextField
+<span class="nc" id="L114">		portText.addObserver(startServerBtn);</span>
+
+		// Once we chose a directory
+<span class="nc" id="L117">		dirChooser.addObserver(saveMsgTextField);</span>
+
+		// When a message is received
+<span class="nc" id="L120">		MailSaver mailSaver = SMTPServerHandler.INSTANCE.getMailSaver();</span>
+<span class="nc" id="L121">		mailSaver.addObserver(nbReceivedLabel);</span>
+<span class="nc" id="L122">		mailSaver.addObserver(mailsListPane);</span>
+<span class="nc" id="L123">		mailSaver.addObserver(lastMailPane);</span>
+<span class="nc" id="L124">		mailSaver.addObserver(clearAll);</span>
+
+		// When we click on &quot;clear all&quot;
+<span class="nc" id="L127">		clearAll.addObserver(nbReceivedLabel);</span>
+<span class="nc" id="L128">		clearAll.addObserver(mailsListPane);</span>
+<span class="nc" id="L129">		clearAll.addObserver(logsPane);</span>
+<span class="nc" id="L130">		clearAll.addObserver(lastMailPane);</span>
+<span class="nc" id="L131">	}</span>
+
+	/**
+	 * Places all components in the panel.
+	 */
+	private void buildGUI() {
+		// Port / Start server
+<span class="nc" id="L138">		mainPanel.add(portLabel);</span>
+<span class="nc" id="L139">		mainPanel.add(portText.get(), &quot;w 60!&quot;);</span>
+<span class="nc" id="L140">		mainPanel.add(startServerBtn.get(), &quot;span, w 165!&quot;);</span>
+
+		// Save messages to...
+<span class="nc" id="L143">		mainPanel.add(saveMessages);</span>
+<span class="nc" id="L144">		mainPanel.add(saveMsgTextField.get(), &quot;span, w 230!&quot;);</span>
+
+		// Nb received
+<span class="nc" id="L147">		mainPanel.add(receivedLabel);</span>
+<span class="nc" id="L148">		mainPanel.add(nbReceivedLabel.get(), &quot;span&quot;);</span>
+
+		// Tab pane
+<span class="nc" id="L151">		tabbedPane.add(mailsListPane.get(), i18n.get(&quot;mainpanel.tab.mailslist&quot;));</span>
+<span class="nc" id="L152">		tabbedPane.add(logsPane.get(), i18n.get(&quot;mainpanel.tab.smtplog&quot;));</span>
+<span class="nc" id="L153">		tabbedPane.add(lastMailPane.get(), i18n.get(&quot;mainpanel.tab.lastmessage&quot;));</span>
+<span class="nc" id="L154">		mainPanel.add(tabbedPane, &quot;span, grow&quot;);</span>
+
+		// Clear all
+<span class="nc" id="L157">		mainPanel.add(clearAll.get(), &quot;span, center&quot;);</span>
+<span class="nc" id="L158">	}</span>
+
+	/**
+	 * Checks command line arguments and toggles components if necessary.
+	 * &lt;p&gt;
+	 * &lt;ul&gt;&lt;li&gt;if the user has chosen a different port, then specifies it in the port text field.&lt;/li&gt;
+	 * &lt;li&gt;if the user has chosen to auto-start the SMTP server, then it toggles automatically the &quot;start server&quot; button.&lt;/li&gt;&lt;/ul&gt;
+	 * &lt;/p&gt;
+	 */
+	private void checkArgs() {
+<span class="nc" id="L168">		ArgsHandler args = ArgsHandler.INSTANCE;</span>
+
+<span class="nc bnc" id="L170" title="All 2 branches missed.">		if (args.getPort() != null) {</span>
+<span class="nc" id="L171">			portText.setText(args.getPort());</span>
+		}
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">		if (args.shouldStartServerAtLaunch()) {</span>
+<span class="nc" id="L175">			startServerBtn.toggleButton();</span>
+		}
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">		if (args.memoryModeEnabled()) {</span>
+<span class="nc" id="L179">			saveMsgTextField.get().setEnabled(false);</span>
+		}
+<span class="nc" id="L181">	}</span>
+
+	/**
+	 * Assigns labels to components, for accessibility purpose.
+	 */
+	private void assignLabelsToFields() {
+<span class="nc" id="L187">		portLabel.setLabelFor(portText.get());</span>
+<span class="nc" id="L188">		saveMessages.setLabelFor(saveMsgTextField.get());</span>
+<span class="nc" id="L189">		receivedLabel.setLabelFor(nbReceivedLabel.get());</span>
+<span class="nc" id="L190">	}</span>
+
+	/**
+	 * Returns reference to portText field. Used for saving last values to file
+	 *
+	 * @return reference to portText field. Used for saving last values to file
+	 */
+	public PortTextField getPortText() {
+<span class="nc" id="L198">		return portText;</span>
+	}
+
+	/**
+	 * Returns reference to saveMsgTextField. Used for saving last values to file
+     *
+     * @return reference to saveMsgTextField. Used for saving last values to file
+	 */
+	public SaveMsgField getSaveMsgTextField() {
+<span class="nc" id="L207">		return saveMsgTextField;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

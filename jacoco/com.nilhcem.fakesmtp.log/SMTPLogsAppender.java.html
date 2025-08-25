@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SMTPLogsAppender.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.log</a> &gt; <span class="el_source">SMTPLogsAppender.java</span></div><h1>SMTPLogsAppender.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.log;
+
+import java.util.Observable;
+
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
+
+/**
+ * Logback appender class, which will redirect all logs to the {@code LogsPane} object.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ * @param &lt;E&gt; a Logback logging event.
+ */
+<span class="fc" id="L15">public final class SMTPLogsAppender&lt;E&gt; extends AppenderBase&lt;E&gt; {</span>
+<span class="fc" id="L16">	private SMTPLogsObservable observable = new SMTPLogsObservable();</span>
+
+	/**
+	 * Receives a log from Logback, and sends it to the {@code LogsPane} object.
+	 *
+	 * @param event a Logback {@code ILoggingEvent} event.
+	 */
+	@Override
+	protected void append(E event) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if (event instanceof ILoggingEvent) {</span>
+<span class="nc" id="L26">			ILoggingEvent loggingEvent = (ILoggingEvent) event;</span>
+<span class="nc" id="L27">			observable.notifyObservers(loggingEvent.getFormattedMessage());</span>
+		}
+<span class="nc" id="L29">	}</span>
+
+	/**
+	 * Returns the log observable object.
+	 *
+	 * @return the log observable object.
+	 */
+	public Observable getObservable() {
+<span class="nc" id="L37">		return observable;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

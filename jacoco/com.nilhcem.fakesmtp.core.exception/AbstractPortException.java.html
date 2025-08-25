@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractPortException.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.core.exception</a> &gt; <span class="el_source">AbstractPortException.java</span></div><h1>AbstractPortException.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.core.exception;
+
+/**
+ * Abstract class to simplify creation of exceptions due to a SMTP port error.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+abstract class AbstractPortException extends Exception {
+	private static final long serialVersionUID = 9011196541962512429L;
+	private final int port;
+
+	/**
+	 * Copies the stack trace of the exception passed in parameter, and sets the port which caused the exception.
+	 *
+	 * @param e the exception we need to copy the stack trace from.
+	 * @param port the selected port which was the cause of the exception.
+	 */
+<span class="fc" id="L19">	public AbstractPortException(Exception e, int port) {</span>
+<span class="fc" id="L20">		setStackTrace(e.getStackTrace());</span>
+<span class="fc" id="L21">		this.port = port;</span>
+<span class="fc" id="L22">	}</span>
+
+	/**
+	 * Returns the port entered by the user.
+	 * &lt;p&gt;
+	 * Useful to know why the SMTP server could not start.
+	 * &lt;/p&gt;
+	 *
+	 * @return the port which caused the exception.
+	 */
+	public int getPort() {
+<span class="nc" id="L33">		return port;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

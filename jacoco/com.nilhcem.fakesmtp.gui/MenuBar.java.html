@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuBar.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui</a> &gt; <span class="el_source">MenuBar.java</span></div><h1>MenuBar.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui;
+
+import com.nilhcem.fakesmtp.core.ArgsHandler;
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.gui.listeners.AboutActionListener;
+import com.nilhcem.fakesmtp.gui.listeners.ExitActionListener;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+
+/**
+ * Provides the menu bar of the application.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class MenuBar extends Observable {
+
+<span class="nc" id="L23">	private final I18n i18n = I18n.INSTANCE;</span>
+<span class="nc" id="L24">	private final JMenuBar menuBar = new JMenuBar();</span>
+	private final MainFrame mainFrame;
+
+	/**
+	 * Creates the menu bar and the different menus (file / edit / help).
+	 *
+	 * @param mainFrame MainFrame class required for the closing action.
+	 */
+<span class="nc" id="L32">	public MenuBar(MainFrame mainFrame) {</span>
+<span class="nc" id="L33">		this.mainFrame = mainFrame;</span>
+
+<span class="nc" id="L35">		menuBar.add(createFileMenu());</span>
+<span class="nc" id="L36">		menuBar.add(createEditMenu());</span>
+<span class="nc" id="L37">		menuBar.add(createHelpMenu());</span>
+<span class="nc" id="L38">	}</span>
+
+	/**
+	 * Returns the JMenuBar object.
+	 *
+	 * @return the JMenuBar object.
+	 */
+	public JMenuBar get() {
+<span class="nc" id="L46">		return menuBar;</span>
+	}
+
+	/**
+	 * Creates the file menu.
+	 * &lt;p&gt;
+	 * The file menu contains an &quot;Exit&quot; item, to quit the application.
+	 * &lt;/p&gt;
+	 *
+	 * @return the newly created file menu.
+	 */
+	private JMenu createFileMenu() {
+<span class="nc" id="L58">		JMenu fileMenu = new JMenu(i18n.get(&quot;menubar.file&quot;));</span>
+<span class="nc" id="L59">		fileMenu.setMnemonic(i18n.get(&quot;menubar.mnemo.file&quot;).charAt(0));</span>
+
+<span class="nc" id="L61">		JMenuItem exit = new JMenuItem(i18n.get(&quot;menubar.exit&quot;));</span>
+<span class="nc" id="L62">		exit.setMnemonic(i18n.get(&quot;menubar.mnemo.exit&quot;).charAt(0));</span>
+<span class="nc" id="L63">		exit.addActionListener(new ExitActionListener(mainFrame));</span>
+
+<span class="nc" id="L65">		fileMenu.add(exit);</span>
+<span class="nc" id="L66">		return fileMenu;</span>
+	}
+
+	/**
+	 * Creates the edit menu.
+	 * &lt;p&gt;
+	 * The edit menu contains a &quot;Messages location&quot; item, to define the location of the incoming mails.
+	 * &lt;/p&gt;
+	 *
+	 * @return the newly created edit menu.
+	 */
+	private JMenu createEditMenu() {
+<span class="nc" id="L78">		JMenu editMenu = new JMenu(i18n.get(&quot;menubar.edit&quot;));</span>
+<span class="nc" id="L79">		editMenu.setMnemonic(i18n.get(&quot;menubar.mnemo.edit&quot;).charAt(0));</span>
+
+<span class="nc" id="L81">		JMenuItem mailsLocation = new JMenuItem(i18n.get(&quot;menubar.messages.location&quot;));</span>
+<span class="nc" id="L82">		mailsLocation.setMnemonic(i18n.get(&quot;menubar.mnemo.msglocation&quot;).charAt(0));</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (ArgsHandler.INSTANCE.memoryModeEnabled()) {</span>
+<span class="nc" id="L84">			mailsLocation.setEnabled(false);</span>
+		} else {
+<span class="nc" id="L86">			mailsLocation.addActionListener(new ActionListener() {</span>
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L89">					setChanged();</span>
+<span class="nc" id="L90">					notifyObservers();</span>
+<span class="nc" id="L91">				}</span>
+			});
+		}
+
+<span class="nc" id="L95">		editMenu.add(mailsLocation);</span>
+<span class="nc" id="L96">		return editMenu;</span>
+	}
+
+	/**
+	 * Creates the help menu.
+	 * &lt;p&gt;
+	 * The help menu contains an &quot;About&quot; item, to display some software information.
+	 * &lt;/p&gt;
+	 *
+	 * @return the newly created help menu.
+	 */
+	private JMenu createHelpMenu() {
+<span class="nc" id="L108">		JMenu helpMenu = new JMenu(i18n.get(&quot;menubar.help&quot;));</span>
+<span class="nc" id="L109">		helpMenu.setMnemonic(i18n.get(&quot;menubar.mnemo.help&quot;).charAt(0));</span>
+
+<span class="nc" id="L111">		JMenuItem about = new JMenuItem(i18n.get(&quot;menubar.about&quot;));</span>
+<span class="nc" id="L112">		about.setMnemonic(i18n.get(&quot;menubar.mnemo.about&quot;).charAt(0));</span>
+<span class="nc" id="L113">		about.addActionListener(new AboutActionListener(menuBar.getParent()));</span>
+
+<span class="nc" id="L115">		helpMenu.add(about);</span>
+<span class="nc" id="L116">		return helpMenu;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

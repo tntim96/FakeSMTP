@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LastMailPane.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui.tab</a> &gt; <span class="el_source">LastMailPane.java</span></div><h1>LastMailPane.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui.tab;
+
+import com.nilhcem.fakesmtp.gui.info.ClearAllButton;
+import com.nilhcem.fakesmtp.model.EmailModel;
+import com.nilhcem.fakesmtp.server.MailSaver;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * Scrolled text area where will be displayed the last received email.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class LastMailPane implements Observer {
+
+<span class="nc" id="L20">	private final JScrollPane lastMailPane = new JScrollPane();</span>
+<span class="nc" id="L21">	private final JTextArea lastMailArea = new JTextArea();</span>
+
+	/**
+	 * Creates the text area and disables the possibility to edit it.
+	 */
+<span class="nc" id="L26">	public LastMailPane() {</span>
+<span class="nc" id="L27">		lastMailArea.setEditable(false);</span>
+<span class="nc" id="L28">		lastMailPane.getViewport().add(lastMailArea, null);</span>
+<span class="nc" id="L29">	}</span>
+
+	/**
+	 * Returns the JScrollPane object.
+	 *
+	 * @return the JScrollPane object.
+	 */
+	public JScrollPane get() {
+<span class="nc" id="L37">		return lastMailPane;</span>
+	}
+
+	/**
+	 * Updates the content of the text area.
+	 * &lt;p&gt;
+	 * This method will be called by an observable element.
+     * &lt;/p&gt;
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;If the observable is a {@link MailSaver} object, the text area will contain the content of the last received email;&lt;/li&gt;
+	 *   &lt;li&gt;If the observable is a {@link ClearAllButton} object, the text area will be cleared.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 *
+	 * @param o the observable element which will notify this class.
+	 * @param data optional parameters (an {@code EmailModel} object, for the case of a {@code MailSaver} observable).
+	 */
+	@Override
+	public synchronized void update(Observable o, Object data) {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">		if (o instanceof MailSaver) {</span>
+<span class="nc" id="L56">			EmailModel model = (EmailModel) data;</span>
+<span class="nc" id="L57">			lastMailArea.setText(model.getEmailStr());</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		} else if (o instanceof ClearAllButton) {</span>
+<span class="nc" id="L59">			lastMailArea.setText(&quot;&quot;);</span>
+		}
+<span class="nc" id="L61">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

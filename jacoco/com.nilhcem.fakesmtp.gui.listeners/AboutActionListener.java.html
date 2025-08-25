@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AboutActionListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui.listeners</a> &gt; <span class="el_source">AboutActionListener.java</span></div><h1>AboutActionListener.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui.listeners;
+
+import com.nilhcem.fakesmtp.core.Configuration;
+import com.nilhcem.fakesmtp.core.I18n;
+import java.awt.Container;
+import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URI;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Implements the About action.
+ *
+ * @author Vest
+ * @since 2.1
+ */
+public class AboutActionListener implements ActionListener {
+
+<span class="nc" id="L27">	private final I18n i18n = I18n.INSTANCE;</span>
+	private final Container parent;
+
+<span class="nc" id="L30">	private static final Logger LOGGER = LoggerFactory.getLogger(AboutActionListener.class);</span>
+
+	/**
+	 * @param parent The parent container that is used for the About dialog window.
+	 */
+<span class="nc" id="L35">	public AboutActionListener(Container parent) {</span>
+<span class="nc" id="L36">		this.parent = parent;</span>
+<span class="nc" id="L37">	}</span>
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// for copying style
+<span class="nc" id="L42">		JLabel label = new JLabel();</span>
+<span class="nc" id="L43">		Font font = label.getFont();</span>
+
+		// create some css from the label's font
+<span class="nc" id="L46">		StringBuffer style = new StringBuffer(&quot;font-family:&quot;).append(font.getFamily()).append(&quot;;font-weight:&quot;);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		if (font.isBold()) {</span>
+<span class="nc" id="L48">			style.append(&quot;bold&quot;);</span>
+		} else {
+<span class="nc" id="L50">			style.append(&quot;normal&quot;);</span>
+		}
+<span class="nc" id="L52">		style.append(&quot;;font-size:&quot;).append(font.getSize()).append(&quot;pt;&quot;);</span>
+
+		// html content
+<span class="nc" id="L55">		String link = i18n.get(&quot;menubar.about.dialog.link&quot;);</span>
+<span class="nc" id="L56">		JEditorPane ep = new JEditorPane(&quot;text/html&quot;,</span>
+<span class="nc" id="L57">			String.format(&quot;&lt;html&gt;&lt;body style=\&quot;%s\&quot;&gt;%s&lt;br /&gt;&lt;a href=\&quot;%s\&quot;&gt;%s&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;&quot;,</span>
+<span class="nc" id="L58">				style, i18n.get(&quot;menubar.about.dialog&quot;), link, link));</span>
+
+		// handle link events
+<span class="nc" id="L61">		ep.addHyperlinkListener(new HyperlinkListener() {</span>
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+<span class="nc bnc" id="L64" title="All 2 branches missed.">				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {</span>
+<span class="nc" id="L65">					AboutActionListener.launchUrl(e.getURL().toString());</span>
+				}
+<span class="nc" id="L67">			}</span>
+		});
+<span class="nc" id="L69">		ep.setEditable(false);</span>
+<span class="nc" id="L70">		ep.setBackground(label.getBackground());</span>
+
+		// show
+<span class="nc" id="L73">		JOptionPane.showMessageDialog(parent, ep, String.format(i18n.get(&quot;menubar.about.title&quot;),</span>
+<span class="nc" id="L74">			Configuration.INSTANCE.get(&quot;application.name&quot;)), JOptionPane.INFORMATION_MESSAGE);</span>
+<span class="nc" id="L75">	}</span>
+
+	/**
+	 * Opens a web browser to launch the URL specified in parameters.
+	 *
+	 * @param url the URL to launch.
+	 */
+	private static void launchUrl(String url) {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (Desktop.isDesktopSupported()) {</span>
+			try {
+<span class="nc" id="L85">				Desktop desktop = Desktop.getDesktop();</span>
+<span class="nc bnc" id="L86" title="All 4 branches missed.">				if (desktop != null &amp;&amp; desktop.isSupported(Desktop.Action.BROWSE)) {</span>
+<span class="nc" id="L87">					desktop.browse(new URI(url));</span>
+				}
+<span class="nc" id="L89">			} catch (Exception e) {</span>
+<span class="nc" id="L90">				LOGGER.error(&quot;&quot;, e);</span>
+<span class="nc" id="L91">			}</span>
+		}
+<span class="nc" id="L93">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

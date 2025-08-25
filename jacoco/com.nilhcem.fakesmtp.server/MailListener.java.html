@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MailListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.server</a> &gt; <span class="el_source">MailListener.java</span></div><h1>MailListener.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.server;
+
+import java.io.IOException;
+import java.io.InputStream;
+import org.subethamail.smtp.helper.SimpleMessageListener;
+
+/**
+ * Listens to incoming emails and redirects them to the {@code MailSaver} object.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class MailListener implements SimpleMessageListener {
+	private final MailSaver saver;
+
+	/**
+	 * Creates the listener.
+	 *
+	 * @param saver a {@code MailServer} object used to save emails and notify components.
+	 */
+<span class="fc" id="L21">	public MailListener(MailSaver saver) {</span>
+<span class="fc" id="L22">		this.saver = saver;</span>
+<span class="fc" id="L23">	}</span>
+
+	/**
+	 * Accepts all kind of email &lt;i&gt;(always return true)&lt;/i&gt;.
+	 * &lt;p&gt;
+	 * Called once for every RCPT TO during a SMTP exchange.&lt;br&gt;
+     * Each accepted recipient will result in a separate deliver() call later.
+     * &lt;/p&gt;
+     *
+	 * @param from the user who send the email.
+	 * @param recipient the recipient of the email.
+	 * @return always return {@code true}
+	 */
+	public boolean accept(String from, String recipient) {
+<span class="nc" id="L37">		return true;</span>
+	}
+
+    /**
+     * Receives emails and forwards them to the {@link MailSaver} object.
+     */
+	@Override
+	public void deliver(String from, String recipient, InputStream data) throws IOException {
+<span class="nc" id="L45">		saver.saveEmailAndNotify(from, recipient, data);</span>
+<span class="nc" id="L46">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

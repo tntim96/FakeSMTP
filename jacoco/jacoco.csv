@@ -1,0 +1,53 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Fake SMTP,com.nilhcem.fakesmtp.gui.listeners,AboutActionListener,139,0,8,0,30,0,8,0,4,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.listeners,ExitActionListener,12,0,0,0,6,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.listeners,MainWindowListener,95,0,10,0,25,0,8,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.listeners,MainWindowListener.new ActionListener() {...},40,0,0,0,8,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.listeners,AboutActionListener.new HyperlinkListener() {...},16,0,2,0,4,0,3,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.model,EmailModel,3,42,0,0,1,18,1,12,1,12
+Fake SMTP,com.nilhcem.fakesmtp.model,UIModel,12,107,2,6,6,30,5,12,3,10
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,SaveMsgField,50,0,4,0,13,0,5,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,StartServerButton,149,0,4,0,30,0,7,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,NbReceivedLabel,88,0,4,0,26,0,7,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,ClearAllButton,48,0,4,0,11,0,5,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,PortTextField,61,0,8,0,14,0,8,0,4,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,ClearAllButton.new ActionListener() {...},63,0,4,0,13,0,4,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,StartServerButton.new ActionListener() {...},10,0,0,0,3,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,PortTextField.new ActionListener() {...},13,0,0,0,4,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,SaveMsgField.new MouseListener() {...},20,0,0,0,10,0,7,0,7,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.info,PortTextField.new DocumentListener() {...},22,0,0,0,9,0,5,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.server,SMTPServerHandler,31,94,4,4,8,26,6,4,2,4
+Fake SMTP,com.nilhcem.fakesmtp.server,MailListener,9,6,0,0,3,3,2,1,2,1
+Fake SMTP,com.nilhcem.fakesmtp.server,SMTPAuthHandlerFactory,14,3,0,0,4,1,2,1,2,1
+Fake SMTP,com.nilhcem.fakesmtp.server,SMTPAuthHandler,35,0,4,0,10,0,5,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.server,MailSaver,65,230,14,18,24,59,11,13,0,8
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,UncaughtExceptionHandler.new Runnable() {...},20,0,0,0,3,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,UncaughtExceptionHandler,56,0,2,0,15,0,6,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,BindPortException,5,0,0,0,2,0,1,0,1,0
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,OutOfRangePortException,0,5,0,0,0,2,0,1,0,1
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,AbstractPortException,3,10,0,0,1,4,1,1,1,1
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,InvalidPortException,0,7,0,0,0,3,0,1,0,1
+Fake SMTP,com.nilhcem.fakesmtp.core.exception,InvalidHostException,3,10,0,0,1,4,1,1,1,1
+Fake SMTP,com.nilhcem.fakesmtp.gui,TrayPopup,55,0,0,0,12,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MainPanel,316,0,6,0,65,0,11,0,8,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,DirChooser,82,0,8,0,22,0,7,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MainFrame.new Thread() {...},9,0,0,0,3,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MainFrame.new WindowAdapter() {...},10,0,0,0,3,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MainFrame,193,0,12,0,45,0,9,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MenuBar.new ActionListener() {...},13,0,0,0,4,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui,MenuBar,177,0,2,0,32,0,6,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp,FakeSMTP.new Runnable() {...},69,0,8,0,21,0,6,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp,FakeSMTP,82,0,8,0,29,0,9,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.core,I18n,15,45,0,0,4,12,0,3,0,3
+Fake SMTP,com.nilhcem.fakesmtp.core,ArgsHandler,154,91,14,0,38,14,16,3,9,3
+Fake SMTP,com.nilhcem.fakesmtp.core,Configuration,35,79,2,4,10,19,5,6,3,5
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,LastMailPane,47,0,4,0,13,0,5,0,3,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,LogsPane,100,0,6,0,23,0,7,0,4,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane.new JTable() {...},8,0,0,0,2,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane.new DefaultTableModel() {...},8,0,0,0,2,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane,235,0,10,0,44,0,10,0,5,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane.new ComponentAdapter() {...},59,0,2,0,9,0,3,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane.new MouseListener() {...},111,0,14,0,23,0,13,0,6,0
+Fake SMTP,com.nilhcem.fakesmtp.gui.tab,MailsListPane.new ComponentAdapter() {...},23,0,0,0,3,0,2,0,2,0
+Fake SMTP,com.nilhcem.fakesmtp.log,SMTPLogsAppender,15,8,2,0,5,2,3,1,2,1
+Fake SMTP,com.nilhcem.fakesmtp.log,SMTPLogsObservable,6,3,0,0,3,1,1,1,1,1

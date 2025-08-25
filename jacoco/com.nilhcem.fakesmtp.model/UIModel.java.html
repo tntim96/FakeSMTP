@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UIModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.model</a> &gt; <span class="el_source">UIModel.java</span></div><h1>UIModel.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.model;
+
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.core.exception.BindPortException;
+import com.nilhcem.fakesmtp.core.exception.InvalidHostException;
+import com.nilhcem.fakesmtp.core.exception.InvalidPortException;
+import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
+import com.nilhcem.fakesmtp.server.SMTPServerHandler;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * UI presentation model of the application.
+ * &lt;p&gt;
+ * The essence of a Presentation Model is of a fully self-contained class that represents all the data
+ * and behavior of the UI window, but without any of the controls used to render that UI on the screen.
+ * &lt;/p&gt;
+ *
+ * @author Nilhcem
+ * @since 1.0
+ * @see &lt;a href=&quot;link&quot;&gt;http://martinfowler.com/eaaDev/PresentationModel.html&lt;/a&gt;
+ */
+<span class="fc" id="L27">public enum UIModel {</span>
+<span class="fc" id="L28">	INSTANCE;</span>
+
+<span class="fc" id="L30">	private boolean started = false; // server is not started by default</span>
+	private String portStr;
+	private String hostStr;
+<span class="fc" id="L33">	private int nbMessageReceived = 0;</span>
+<span class="fc" id="L34">	private String savePath = I18n.INSTANCE.get(&quot;emails.default.dir&quot;);</span>
+<span class="fc" id="L35">	private final Map&lt;Integer, String&gt; listMailsMap = new HashMap&lt;Integer, String&gt;();</span>
+	private List&lt;String&gt; relayDomains;
+
+<span class="fc" id="L38">	UIModel() {</span>
+<span class="fc" id="L39">	}</span>
+
+	/**
+	 * Happens when a user clicks on the start button.
+	 * &lt;p&gt;
+	 * This method will notify the {@code SMTPServerHandler} to start the server.
+	 * &lt;/p&gt;
+	 *
+	 * @throws InvalidPortException when the port is invalid.
+	 * @throws BindPortException when the port cannot be bound.
+	 * @throws OutOfRangePortException when the port is out of range.
+	 * @throws InvalidHostException when the address cannot be resolved.
+	 * @throws RuntimeException when an unknown exception happened.
+	 */
+	public void toggleButton() throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
+<span class="fc bfc" id="L54" title="All 2 branches covered.">		if (started) {</span>
+			// Do nothing. We can't stop the server. User has to quit the app (issue with SubethaSMTP)
+		} else {
+			try {
+<span class="fc" id="L58">				int port = Integer.parseInt(portStr);</span>
+<span class="fc" id="L59">				InetAddress host = null;</span>
+<span class="pc bpc" id="L60" title="2 of 4 branches missed.">				if (hostStr != null &amp;&amp; !hostStr.isEmpty()) {</span>
+<span class="fc" id="L61">					host = InetAddress.getByName(hostStr);</span>
+				}
+
+<span class="fc" id="L64">				SMTPServerHandler.INSTANCE.startServer(port, host);</span>
+<span class="fc" id="L65">			} catch (NumberFormatException e) {</span>
+<span class="fc" id="L66">				throw new InvalidPortException(e);</span>
+<span class="fc" id="L67">			} catch	(UnknownHostException e) {</span>
+<span class="fc" id="L68">				throw new InvalidHostException(e, hostStr);</span>
+<span class="fc" id="L69">			}</span>
+		}
+<span class="fc bfc" id="L71" title="All 2 branches covered.">		started = !started;</span>
+<span class="fc" id="L72">	}</span>
+
+	/**
+	 * Returns {@code true} if the server is started.
+	 *
+	 * @return {@code true} if the server is started.
+	 */
+	public boolean isStarted() {
+<span class="fc" id="L80">		return started;</span>
+	}
+
+	public void setPort(String port) {
+<span class="fc" id="L84">		this.portStr = port;</span>
+<span class="fc" id="L85">	}</span>
+
+	public void setHost(String host) {
+<span class="fc" id="L88">		this.hostStr = host;</span>
+<span class="fc" id="L89">	}</span>
+
+	public int getNbMessageReceived() {
+<span class="fc" id="L92">		return nbMessageReceived;</span>
+	}
+
+	public void setNbMessageReceived(int nbMessageReceived) {
+<span class="nc" id="L96">		this.nbMessageReceived = nbMessageReceived;</span>
+<span class="nc" id="L97">	}</span>
+
+	public String getSavePath() {
+<span class="fc" id="L100">		return savePath;</span>
+	}
+
+	public void setSavePath(String savePath) {
+<span class="nc" id="L104">		this.savePath = savePath;</span>
+<span class="nc" id="L105">	}</span>
+
+	public Map&lt;Integer, String&gt; getListMailsMap() {
+<span class="fc" id="L108">		return listMailsMap;</span>
+	}
+
+	public List&lt;String&gt; getRelayDomains() {
+<span class="fc" id="L112">		return relayDomains;</span>
+	}
+
+	public void setRelayDomains(List&lt;String&gt; relayDomains) {
+<span class="nc" id="L116">		this.relayDomains = relayDomains;</span>
+<span class="nc" id="L117">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

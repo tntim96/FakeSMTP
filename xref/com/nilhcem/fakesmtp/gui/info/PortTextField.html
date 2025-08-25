@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>PortTextField xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -26,7 +26,7 @@
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> * @author Nilhcem</em>
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <em class="jxr_javadoccomment"> * @since 1.0</em>
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/PortTextField.html">PortTextField</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="PortTextField" href="../../../../../com/nilhcem/fakesmtp/gui/info/PortTextField.html#PortTextField">PortTextField</a> <strong class="jxr_keyword">extends</strong> Observable <strong class="jxr_keyword">implements</strong> Observer {
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JTextField portTextField = <strong class="jxr_keyword">new</strong> JTextField();
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">	 * Each time the port is modified, the port from the {@link UIModel} will be reset.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/info/PortTextField.html">PortTextField</a>() {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> <a name="PortTextField" href="../../../../../com/nilhcem/fakesmtp/gui/info/PortTextField.html#PortTextField">PortTextField</a>() {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		portTextField.setToolTipText(I18n.INSTANCE.get(<span class="jxr_string">"porttextfield.tooltip"</span>));
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		portTextField.getDocument().addDocumentListener(<strong class="jxr_keyword">new</strong> DocumentListener() {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  			@Override
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param portStr the port to set.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setText(String portStr) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">if</strong> (portStr != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">if</strong> (portStr != <strong class="jxr_keyword">null</strong> &amp;&amp; !portStr.isEmpty()) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			portTextField.setText(portStr);
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
@@ -103,13 +103,13 @@
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Override
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(Observable o, Object arg) {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">if</strong> (o instanceof StartServerButton) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="StartServerButton" href="../../../../../com/nilhcem/fakesmtp/gui/info/StartServerButton.html#StartServerButton">StartServerButton</a>) {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			portTextField.setEnabled(!UIModel.INSTANCE.isStarted());
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2014. All rights reserved.</div>
+<div id="footer">© 2025</div>
 </body>
 </html>

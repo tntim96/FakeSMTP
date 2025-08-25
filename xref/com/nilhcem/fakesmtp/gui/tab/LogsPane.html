@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>LogsPane xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * @author Nilhcem</em>
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * @since 1.0</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/tab/LogsPane.html">LogsPane</a> <strong class="jxr_keyword">implements</strong> Observer {
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="LogsPane" href="../../../../../com/nilhcem/fakesmtp/gui/tab/LogsPane.html#LogsPane">LogsPane</a> <strong class="jxr_keyword">implements</strong> Observer {
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JScrollPane logsPane = <strong class="jxr_keyword">new</strong> JScrollPane();
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> SimpleDateFormat dateFormat = <strong class="jxr_keyword">new</strong> SimpleDateFormat(<span class="jxr_string">"hh:mm:ss a"</span>);
@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * Creates the text area, sets it as non-editable and sets an observer to intercept logs.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/tab/LogsPane.html">LogsPane</a>() {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <a name="LogsPane" href="../../../../../com/nilhcem/fakesmtp/gui/tab/LogsPane.html#LogsPane">LogsPane</a>() {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		logsArea.setEditable(false);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		logsPane.getViewport().add(logsArea, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		addObserverToSmtpLogAppender();
@@ -90,11 +90,11 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Override
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> update(Observable o, Object log) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (o instanceof SMTPLogsObservable) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="SMTPLogsObservable" href="../../../../../com/nilhcem/fakesmtp/log/SMTPLogsObservable.html#SMTPLogsObservable">SMTPLogsObservable</a>) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<em class="jxr_comment">// Update and scroll pane to the bottom</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			logsArea.append(String.format(<span class="jxr_string">"%s - %s%n"</span>, dateFormat.format(<strong class="jxr_keyword">new</strong> Date()), log));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			logsArea.setCaretPosition(logsArea.getText().length());
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof ClearAllButton) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof <a name="ClearAllButton" href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html#ClearAllButton">ClearAllButton</a>) {
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<em class="jxr_comment">// Remove text</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			logsArea.setText(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
@@ -102,6 +102,6 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2014. All rights reserved.</div>
+<div id="footer">© 2025</div>
 </body>
 </html>

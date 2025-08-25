@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MailsListPane.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui.tab</a> &gt; <span class="el_source">MailsListPane.java</span></div><h1>MailsListPane.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui.tab;
+
+import com.nilhcem.fakesmtp.core.ArgsHandler;
+import com.nilhcem.fakesmtp.core.Configuration;
+import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.gui.info.ClearAllButton;
+import com.nilhcem.fakesmtp.model.EmailModel;
+import com.nilhcem.fakesmtp.model.UIModel;
+import com.nilhcem.fakesmtp.server.MailSaver;
+import jakarta.mail.internet.MimeUtility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Desktop;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * Scrolled table where will be displayed every received email (one line for each email).
+ * &lt;p&gt;
+ * The user can double-click on any row to see the selected email.
+ * &lt;/p&gt;
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class MailsListPane implements Observer {
+
+<span class="nc" id="L42">	private int nbElements = 0;</span>
+<span class="nc" id="L43">	private Desktop desktop = null;</span>
+<span class="nc" id="L44">	private static final Logger LOGGER = LoggerFactory.getLogger(MailsListPane.class);</span>
+<span class="nc" id="L45">	private final I18n i18n = I18n.INSTANCE;</span>
+<span class="nc" id="L46">	private final JScrollPane mailsListPane = new JScrollPane();</span>
+<span class="nc" id="L47">	private final SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;hh:mm:ss a&quot;);</span>
+<span class="nc" id="L48">	private final int[] widths = new int[] {85, 140, 140}; // widths of columns in tab</span>
+
+	/**
+	 * Table with non-editable cells.
+	 */
+<span class="nc" id="L53">	private final JTable table = new JTable() {</span>
+		private static final long serialVersionUID = 6332956458868628779L;
+
+		@Override
+		public boolean isCellEditable(int row, int column) {
+<span class="nc" id="L58">			return false;</span>
+		}
+	};
+
+	/**
+	 * Table model with non-editable cells.
+	 */
+<span class="nc" id="L65">	private final DefaultTableModel model = new DefaultTableModel() {</span>
+		private static final long serialVersionUID = -6716294637919469299L;
+
+		public boolean isCellEditable(int rowIndex, int mColIndex) {
+<span class="nc" id="L69">			return false;</span>
+		}
+	};
+
+	/**
+	 * Creates the table and sets its cells as non editable.
+	 * &lt;p&gt;
+	 * Adds some mouse events on the table, to display emails, when a user clicks on
+	 * a specific row.&lt;br&gt;
+	 * If the email can't be found, an error message will be displayed.&lt;br&gt;
+	 * The table will reset the size of its column every time the size of the table changed
+	 * (for example when the user maximizes the window).
+	 * &lt;/p&gt;
+	 */
+<span class="nc" id="L83">	public MailsListPane() {</span>
+		// Init desktop (Java 6 Desktop API)
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if (Desktop.isDesktopSupported()) {</span>
+<span class="nc" id="L86">			desktop = Desktop.getDesktop();</span>
+		}
+
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		if (!ArgsHandler.INSTANCE.memoryModeEnabled()) {</span>
+<span class="nc" id="L90">			table.addMouseListener(new MouseListener() {</span>
+				@Override
+				public void mouseReleased(MouseEvent e) {
+<span class="nc" id="L93">				}</span>
+
+				@Override
+				public void mousePressed(MouseEvent e) {
+<span class="nc" id="L97">				}</span>
+
+				@Override
+				public void mouseExited(MouseEvent e) {
+<span class="nc" id="L101">				}</span>
+
+				@Override
+				public void mouseEntered(MouseEvent e) {
+<span class="nc" id="L105">				}</span>
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+
+<span class="nc" id="L110">					String emlViewer = ArgsHandler.INSTANCE.getEmlViewer();</span>
+
+<span class="nc bnc" id="L112" title="All 6 branches missed.">					if (e.getClickCount() == 2 &amp;&amp; (emlViewer != null || desktop != null)) {</span>
+<span class="nc" id="L113">						File file = null;</span>
+<span class="nc" id="L114">						JTable target = (JTable) e.getSource();</span>
+<span class="nc" id="L115">						String fileName = UIModel.INSTANCE.getListMailsMap().get(target.getSelectedRow());</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">						if (fileName == null) {</span>
+<span class="nc" id="L117">							LOGGER.error(&quot;Can't find any associated email for row #{}&quot;, target.getSelectedRow());</span>
+						} else {
+<span class="nc" id="L119">							file = new File(fileName);</span>
+						}
+
+<span class="nc bnc" id="L122" title="All 4 branches missed.">						if (file != null &amp;&amp; file.exists()) {</span>
+							try {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">								if (emlViewer != null) {</span>
+<span class="nc" id="L125">									Runtime.getRuntime().exec(emlViewer + &quot; &quot; + file.getAbsolutePath());</span>
+								} else {
+<span class="nc" id="L127">									desktop.open(file);</span>
+								}
+<span class="nc" id="L129">							} catch (IOException ioe) {</span>
+<span class="nc" id="L130">								LOGGER.error(&quot;&quot;, ioe);</span>
+<span class="nc" id="L131">								displayError(String.format(i18n.get(&quot;mailslist.err.open&quot;), file.getAbsolutePath()));</span>
+<span class="nc" id="L132">							}</span>
+						} else {
+<span class="nc" id="L134">							displayError(String.format(i18n.get(&quot;mailslist.err.find&quot;), file.getAbsolutePath()));</span>
+						}
+					}
+<span class="nc" id="L137">				}</span>
+			});
+        }
+
+		// Auto scroll tab to bottom when a new element is inserted
+<span class="nc" id="L142">		table.addComponentListener(new ComponentAdapter() {</span>
+			public void componentResized(ComponentEvent e) {
+<span class="nc" id="L144">				table.scrollRectToVisible(new Rectangle(table.getCellRect(nbElements, 0, true)));</span>
+<span class="nc" id="L145">			}</span>
+		});
+
+<span class="nc" id="L148">		model.addColumn(i18n.get(&quot;mailslist.col.received&quot;));</span>
+<span class="nc" id="L149">		model.addColumn(i18n.get(&quot;mailslist.col.from&quot;));</span>
+<span class="nc" id="L150">		model.addColumn(i18n.get(&quot;mailslist.col.to&quot;));</span>
+<span class="nc" id="L151">		model.addColumn(i18n.get(&quot;mailslist.col.subject&quot;));</span>
+<span class="nc" id="L152">		table.setModel(model);</span>
+
+<span class="nc" id="L154">		mailsListPane.addComponentListener(new ComponentAdapter() {</span>
+			public void componentResized(ComponentEvent e) {
+				// When the width of a column is changed, only the columns to the left and right of the margin change
+<span class="nc" id="L157">				table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);</span>
+
+				// Set width for each column
+<span class="nc" id="L160">				int total = 0;</span>
+<span class="nc" id="L161">				int length = widths.length;</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">				for (int i = 0; i &lt; length; i++) {</span>
+<span class="nc" id="L163">					table.getColumnModel().getColumn(i).setPreferredWidth(widths[i]);</span>
+<span class="nc" id="L164">					total += widths[i];</span>
+				}
+<span class="nc" id="L166">				table.getColumnModel().getColumn(length).setPreferredWidth(table.getWidth() - total);</span>
+<span class="nc" id="L167">			}</span>
+		});
+<span class="nc" id="L169">		mailsListPane.getViewport().add(table, null);</span>
+<span class="nc" id="L170">	}</span>
+
+	/**
+	 * Returns the JScrollPane object.
+	 *
+	 * @return the JScrollPane object.
+	 */
+	public JScrollPane get() {
+<span class="nc" id="L178">		return mailsListPane;</span>
+	}
+
+	/**
+	 * Updates the content of the table.
+	 * &lt;p&gt;
+	 * This method will be called by an observable element.
+     * &lt;/p&gt;
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;If the observable is a {@link MailSaver} object, a new row will be added
+	 *   to the table, and the {@link UIModel} will be updated;&lt;/li&gt;
+	 *   &lt;li&gt;If the observable is a {@link ClearAllButton} object, all the cells
+	 *   of the table will be removed, and the {@link UIModel} will be updated.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 *
+	 * @param o the observable element which will notify this class.
+	 * @param arg optional parameters (an {@code EmailModel} object, for the case of
+	 * a {@code MailSaver} observable) containing all the information about the email.
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+<span class="nc bnc" id="L199" title="All 2 branches missed.">		if (o instanceof MailSaver) {</span>
+<span class="nc" id="L200">			EmailModel email = (EmailModel) arg;</span>
+			String subject;
+			try {
+<span class="nc" id="L203">				subject = MimeUtility.decodeText(email.getSubject());</span>
+<span class="nc" id="L204">			} catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L205">				LOGGER.error(&quot;&quot;, e);</span>
+<span class="nc" id="L206">				subject = email.getSubject();</span>
+<span class="nc" id="L207">			}</span>
+
+<span class="nc" id="L209">			model.addRow(new Object[] {dateFormat.format(email.getReceivedDate()), email.getFrom(), email.getTo(), subject});</span>
+<span class="nc" id="L210">			UIModel.INSTANCE.getListMailsMap().put(nbElements++, email.getFilePath());</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">		} else if (o instanceof ClearAllButton) {</span>
+			// Delete information from the map
+<span class="nc" id="L213">			UIModel.INSTANCE.getListMailsMap().clear();</span>
+
+			// Remove elements from the list
+			try {
+<span class="nc bnc" id="L217" title="All 2 branches missed.">				while (nbElements &gt; 0) {</span>
+<span class="nc" id="L218">					model.removeRow(--nbElements);</span>
+				}
+<span class="nc" id="L220">			} catch (ArrayIndexOutOfBoundsException e) {</span>
+<span class="nc" id="L221">				LOGGER.error(&quot;&quot;, e);</span>
+<span class="nc" id="L222">			}</span>
+		}
+<span class="nc" id="L224">	}</span>
+
+	/**
+	 * Displays a message dialog containing the error specified in parameter.
+	 *
+	 * @param error a String representing an error message to display.
+	 */
+	private void displayError(String error) {
+<span class="nc" id="L232">		JOptionPane.showMessageDialog(mailsListPane.getParent(), error,</span>
+<span class="nc" id="L233">			String.format(i18n.get(&quot;mailslist.err.title&quot;), Configuration.INSTANCE.get(&quot;application.name&quot;)),</span>
+			JOptionPane.ERROR_MESSAGE);
+<span class="nc" id="L235">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

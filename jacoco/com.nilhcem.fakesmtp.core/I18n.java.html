@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>I18n.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.core</a> &gt; <span class="el_source">I18n.java</span></div><h1>I18n.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.core;
+
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * Initializes resource bundle and get messages from keys.
+ * &lt;p&gt;
+ * This class will be instantiated only once and will use the JVM's default locale.
+ * &lt;/p&gt;
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+<span class="fc" id="L18">public enum I18n {</span>
+<span class="fc" id="L19">	INSTANCE;</span>
+
+	public static final String UTF8 = &quot;UTF-8&quot;;
+	private static final String RESOURCE_FILE = &quot;i18n/messages&quot;;
+<span class="fc" id="L23">	private final Logger logger = LoggerFactory.getLogger(I18n.class);</span>
+	private final ResourceBundle resources;
+
+	/**
+	 * Initializes resource bundle with the JVM's default locale.
+	 * &lt;p&gt;
+	 * If the JVM's default locale doesn't have any resource file, will take the en_US resources instead.
+	 * &lt;/p&gt;
+	 */
+<span class="fc" id="L32">	I18n() {</span>
+		ResourceBundle bundle;
+
+		try {
+<span class="fc" id="L36">			bundle = ResourceBundle.getBundle(I18n.RESOURCE_FILE, Locale.getDefault());</span>
+<span class="nc" id="L37">		} catch (MissingResourceException mre) {</span>
+<span class="nc" id="L38">			logger.error(&quot;{}&quot;, mre.getMessage());</span>
+<span class="nc" id="L39">			logger.info(&quot;Will use default bundle (en_US) instead&quot;);</span>
+<span class="nc" id="L40">			bundle = ResourceBundle.getBundle(I18n.RESOURCE_FILE, Locale.US);</span>
+<span class="fc" id="L41">		}</span>
+<span class="fc" id="L42">		resources = bundle;</span>
+<span class="fc" id="L43">	}</span>
+
+	/**
+	 * Returns the resource for the key passed in parameters.
+	 * &lt;p&gt;
+	 * If the key is not found, returns an empty string.
+	 * &lt;/p&gt;
+	 *
+	 * @param key a String representing the key we want to get the resource from.
+	 * @return The text corresponding to the key passed in parameters, or an empty string if not found.
+	 */
+	public String get(String key) {
+		try {
+<span class="fc" id="L56">			return resources.getString(key);</span>
+<span class="fc" id="L57">		} catch (MissingResourceException e) {</span>
+<span class="fc" id="L58">			logger.error(&quot;{}&quot;, e.getMessage());</span>
+<span class="fc" id="L59">			return &quot;&quot;;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

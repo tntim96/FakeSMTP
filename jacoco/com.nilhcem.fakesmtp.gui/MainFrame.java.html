@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainFrame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.gui</a> &gt; <span class="el_source">MainFrame.java</span></div><h1>MainFrame.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.gui;
+
+import com.nilhcem.fakesmtp.core.ArgsHandler;
+import com.nilhcem.fakesmtp.core.Configuration;
+import com.nilhcem.fakesmtp.core.exception.UncaughtExceptionHandler;
+import com.nilhcem.fakesmtp.gui.listeners.MainWindowListener;
+import com.nilhcem.fakesmtp.model.UIModel;
+import com.nilhcem.fakesmtp.server.SMTPServerHandler;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import org.slf4j.Logger;
+import org.subethamail.smtp.server.SMTPServer;
+
+
+/**
+ * Provides the main window of the application.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+public final class MainFrame {
+
+<span class="nc" id="L30">	private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);</span>
+
+<span class="nc" id="L32">	private final JFrame mainFrame = new JFrame(Configuration.INSTANCE.get(&quot;application.title&quot;));</span>
+<span class="nc" id="L33">	private final MenuBar menu = new MenuBar(this);</span>
+<span class="nc" id="L34">	private final MainPanel panel = new MainPanel(menu);</span>
+
+	/**
+	 * Creates the main window and makes it visible.
+	 * &lt;p&gt;
+	 * First, assigns the main panel to the default uncaught exception handler to display exceptions in this panel.&lt;br&gt;&lt;br&gt;
+	 * Before creating the main window, the application will have to set some elements, such as:
+	 * &lt;/p&gt;
+	 * &lt;ul&gt;
+	 *   &lt;li&gt;The minimum and default size;&lt;/li&gt;
+	 *   &lt;li&gt;The menu bar and the main panel;&lt;/li&gt;
+	 *   &lt;li&gt;An icon image;&lt;/li&gt;
+	 *   &lt;li&gt;A shutdown hook to stop the server, once the main window is closed.&lt;/li&gt;
+	 * &lt;/ul&gt;&lt;br&gt;
+	 * &lt;p&gt;
+	 * The icon of the application is a modified version from the one provided in &quot;{@code WebAppers.com}&quot;
+	 * &lt;i&gt;(Creative Commons Attribution 3.0 License)&lt;/i&gt;.
+	 * &lt;/p&gt;
+	 */
+<span class="nc" id="L53">	public MainFrame() {</span>
+<span class="nc" id="L54">		((UncaughtExceptionHandler) Thread.getDefaultUncaughtExceptionHandler()).setParentComponent(panel.get());</span>
+<span class="nc" id="L55">		Dimension frameSize = new Dimension(Integer.parseInt(Configuration.INSTANCE.get(&quot;application.min.width&quot;)),</span>
+<span class="nc" id="L56">			Integer.parseInt(Configuration.INSTANCE.get(&quot;application.min.height&quot;)));</span>
+
+<span class="nc" id="L58">		Image iconImage = Toolkit.getDefaultToolkit().getImage(</span>
+<span class="nc" id="L59">			getClass().getResource(Configuration.INSTANCE.get(&quot;application.icon.path&quot;)));</span>
+
+<span class="nc" id="L61">		MainWindowListener windowListener = new MainWindowListener(this);</span>
+
+<span class="nc" id="L63">		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="nc" id="L64">		mainFrame.addWindowListener(new WindowAdapter() {</span>
+			@Override
+			public void windowClosing(WindowEvent e) {
+<span class="nc" id="L67">				close();</span>
+<span class="nc" id="L68">			}</span>
+		});
+
+<span class="nc" id="L71">		mainFrame.addWindowStateListener(windowListener); // used for TrayIcon</span>
+<span class="nc" id="L72">		mainFrame.setSize(frameSize);</span>
+<span class="nc" id="L73">		mainFrame.setMinimumSize(frameSize);</span>
+
+<span class="nc" id="L75">		mainFrame.setJMenuBar(menu.get());</span>
+<span class="nc" id="L76">		mainFrame.getContentPane().add(panel.get());</span>
+<span class="nc" id="L77">		mainFrame.setLocationRelativeTo(null); // Center main frame</span>
+<span class="nc" id="L78">		mainFrame.setIconImage(iconImage);</span>
+
+		// Add shutdown hook to stop server if enabled
+<span class="nc" id="L81">		Runtime.getRuntime().addShutdownHook(new Thread() {</span>
+			@Override
+			public void run() {
+<span class="nc" id="L84">				SMTPServerHandler.INSTANCE.stopServer();</span>
+<span class="nc" id="L85">			}</span>
+		});
+
+		// Restore last saved smtp port (if not overridden by the user)
+<span class="nc" id="L89">		String smtpPort = ArgsHandler.INSTANCE.getPort();</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (smtpPort == null) {</span>
+<span class="nc" id="L91">			smtpPort = Configuration.INSTANCE.get(&quot;smtp.default.port&quot;);</span>
+		}
+<span class="nc" id="L93">		panel.getPortText().setText(smtpPort);</span>
+
+		// Restore last emails directory (if not overridden by the user)
+<span class="nc" id="L96">		String emailsDir = ArgsHandler.INSTANCE.getOutputDirectory();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">		if (emailsDir == null) {</span>
+<span class="nc" id="L98">			emailsDir = Configuration.INSTANCE.get(&quot;emails.default.dir&quot;);</span>
+		}
+<span class="nc bnc" id="L100" title="All 4 branches missed.">		if (emailsDir != null &amp;&amp; !emailsDir.isEmpty()) {</span>
+<span class="nc" id="L101">			panel.getSaveMsgTextField().get().setText(emailsDir);</span>
+<span class="nc" id="L102">			UIModel.INSTANCE.setSavePath(emailsDir);</span>
+		}
+
+<span class="nc" id="L105">		mainFrame.setVisible(true);</span>
+<span class="nc" id="L106">	}</span>
+
+	public void close() {
+<span class="nc" id="L109">		LOGGER.debug(&quot;Closing the application and saving the configuration&quot;);</span>
+
+<span class="nc" id="L111">		Configuration.INSTANCE.set(&quot;smtp.default.port&quot;, panel.getPortText().get().getText());</span>
+<span class="nc" id="L112">		Configuration.INSTANCE.set(&quot;emails.default.dir&quot;, panel.getSaveMsgTextField().get().getText());</span>
+
+		try {
+<span class="nc" id="L115">			Configuration.INSTANCE.saveToUserProfile();</span>
+<span class="nc" id="L116">		} catch (IOException ex) {</span>
+<span class="nc" id="L117">			LOGGER.error(&quot;Could not save configuration&quot;, ex);</span>
+<span class="nc" id="L118">		}</span>
+		// Check for SMTP server running and stop it
+<span class="nc" id="L120">		SMTPServer smtpServer = SMTPServerHandler.INSTANCE.getSmtpServer();</span>
+<span class="nc bnc" id="L121" title="All 4 branches missed.">		if (smtpServer != null &amp;&amp; smtpServer.isRunning()) {</span>
+<span class="nc" id="L122">			smtpServer.stop();</span>
+		}
+
+<span class="nc" id="L125">		mainFrame.dispose();</span>
+<span class="nc" id="L126">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

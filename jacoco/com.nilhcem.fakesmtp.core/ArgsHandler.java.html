@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArgsHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.core</a> &gt; <span class="el_source">ArgsHandler.java</span></div><h1>ArgsHandler.java</h1><pre class="source lang-java linenums">
+package com.nilhcem.fakesmtp.core;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import com.nilhcem.fakesmtp.model.UIModel;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Handles command line arguments.
+ *
+ * @author Nilhcem
+ * @since 1.3
+ */
+<span class="fc" id="L26">public enum ArgsHandler {</span>
+<span class="fc" id="L27">	INSTANCE;</span>
+
+	private static final String OPT_EMAILS_DIR_SHORT = &quot;o&quot;;
+	private static final String OPT_EMAILS_DIR_LONG = &quot;output-dir&quot;;
+	private static final String OPT_EMAILS_DESC = &quot;Emails output directory&quot;;
+
+	private static final String OPT_AUTOSTART_SHORT = &quot;s&quot;;
+	private static final String OPT_AUTOSTART_LONG = &quot;start-server&quot;;
+	private static final String OPT_AUTOSTART_DESC = &quot;Automatically starts the SMTP server at launch&quot;;
+
+	private static final String OPT_PORT_SHORT = &quot;p&quot;;
+	private static final String OPT_PORT_LONG = &quot;port&quot;;
+	private static final String OPT_PORT_DESC = &quot;SMTP port number&quot;;
+
+	private static final String OPT_BACKGROUNDSTART_SHORT = &quot;b&quot;;
+	private static final String OPT_BACKGROUNDSTART_LONG = &quot;background&quot;;
+	private static final String OPT_BACKGROUNDSTART_DESC = &quot;If specified, does not start the GUI. Must be used with the -&quot; + OPT_AUTOSTART_SHORT + &quot; (--&quot; +  OPT_AUTOSTART_LONG + &quot;) argument&quot;;
+
+	private static final String OPT_RELAYDOMAINS_SHORT = &quot;r&quot;;
+	private static final String OPT_RELAYDOMAINS_LONG = &quot;relay-domains&quot;;
+	private static final String OPT_RELAYDOMAINS_DESC = &quot;Comma separated email domain(s) for which relay is accepted. If not specified, relays to any domain. If specified, relays only emails matching these domain(s), dropping (not saving) others&quot;;
+	private static final String OPT_RELAYDOMAINS_SEPARATOR = &quot;,&quot;;
+
+	private static final String OPT_MEMORYMODE_SHORT = &quot;m&quot;;
+	private static final String OPT_MEMORYMODE_LONG = &quot;memory-mode&quot;;
+	private static final String OPT_MEMORYMODE_DESC = &quot;Disable the persistence in order to avoid the overhead that it adds&quot;;
+
+	private static final String OPT_BINDADDRESS_SHORT = &quot;a&quot;;
+	private static final String OPT_BINDADDRESS_LONG = &quot;bind-address&quot;;
+	private static final String OPT_BINDADDRESS_DESC = &quot;IP address or hostname to bind to. Binds to all local IP addresses if not specified. Only works together with the -&quot; + OPT_BACKGROUNDSTART_SHORT + &quot; (--&quot; +  OPT_BACKGROUNDSTART_LONG + &quot;) argument.&quot;;
+
+	private static final String OPT_EMLVIEWER_SHORT = &quot;e&quot;;
+	private static final String OPT_EMLVIEWER_LONG = &quot;eml-viewer&quot;;
+	private static final String OPT_EMLVIEWER_DESC = &quot;Executable of program used for viewing emails&quot;;
+
+	private final Options options;
+
+	private String port;
+	private String bindAddress;
+	private String outputDirectory;
+	private String emlViewer;
+	private boolean backgroundStart;
+	private boolean startServerAtLaunch;
+	private boolean memoryModeEnabled;
+
+	/**
+	 * Handles command line arguments.
+	 */
+<span class="fc" id="L75">	ArgsHandler() {</span>
+<span class="fc" id="L76">		options = new Options();</span>
+<span class="fc" id="L77">		options.addOption(OPT_EMAILS_DIR_SHORT, OPT_EMAILS_DIR_LONG, true, OPT_EMAILS_DESC);</span>
+<span class="fc" id="L78">		options.addOption(OPT_AUTOSTART_SHORT, OPT_AUTOSTART_LONG, false, OPT_AUTOSTART_DESC);</span>
+<span class="fc" id="L79">		options.addOption(OPT_PORT_SHORT, OPT_PORT_LONG, true, OPT_PORT_DESC);</span>
+<span class="fc" id="L80">		options.addOption(OPT_BINDADDRESS_SHORT, OPT_BINDADDRESS_LONG, true, OPT_BINDADDRESS_DESC);</span>
+<span class="fc" id="L81">		options.addOption(OPT_BACKGROUNDSTART_SHORT, OPT_BACKGROUNDSTART_LONG, false, OPT_BACKGROUNDSTART_DESC);</span>
+<span class="fc" id="L82">		options.addOption(OPT_RELAYDOMAINS_SHORT, OPT_RELAYDOMAINS_LONG, true, OPT_RELAYDOMAINS_DESC);</span>
+<span class="fc" id="L83">		options.addOption(OPT_MEMORYMODE_SHORT, OPT_MEMORYMODE_LONG, false, OPT_MEMORYMODE_DESC);</span>
+<span class="fc" id="L84">		options.addOption(OPT_EMLVIEWER_SHORT, OPT_EMLVIEWER_LONG, true, OPT_EMLVIEWER_DESC);</span>
+<span class="fc" id="L85">	}</span>
+
+	/**
+	 * Interprets command line arguments.
+	 *
+	 * @param args program's arguments.
+	 * @throws ParseException when arguments are invalid.
+	 */
+	public void handleArgs(String[] args) throws ParseException {
+<span class="nc" id="L94">		CommandLineParser parser = new GnuParser();</span>
+<span class="nc" id="L95">		CommandLine cmd = parser.parse(options, args);</span>
+
+<span class="nc" id="L97">		outputDirectory = cmd.getOptionValue(OPT_EMAILS_DIR_SHORT);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if (outputDirectory != null) {</span>
+<span class="nc" id="L99">			UIModel.INSTANCE.setSavePath(outputDirectory);</span>
+		}
+
+<span class="nc" id="L102">		port = cmd.getOptionValue(OPT_PORT_SHORT);</span>
+<span class="nc" id="L103">		bindAddress = cmd.getOptionValue(OPT_BINDADDRESS_SHORT);</span>
+<span class="nc" id="L104">		startServerAtLaunch = cmd.hasOption(OPT_AUTOSTART_SHORT);</span>
+<span class="nc" id="L105">		backgroundStart = cmd.hasOption(OPT_BACKGROUNDSTART_SHORT);</span>
+<span class="nc" id="L106">		memoryModeEnabled = cmd.hasOption(OPT_MEMORYMODE_SHORT);</span>
+<span class="nc" id="L107">		emlViewer = cmd.getOptionValue(OPT_EMLVIEWER_SHORT);</span>
+
+		// Change SMTP server log level to info if memory mode was enabled to improve performance
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (memoryModeEnabled) {</span>
+<span class="nc" id="L111">			((Logger) LoggerFactory.getLogger(org.subethamail.smtp.server.Session.class)).setLevel(Level.INFO);</span>
+		}
+
+<span class="nc" id="L114">		String relaydomains = cmd.getOptionValue(OPT_RELAYDOMAINS_SHORT);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if (relaydomains != null) {</span>
+<span class="nc" id="L116">			List&lt;String&gt; domains = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">			for (String domain : Arrays.asList(relaydomains.split(OPT_RELAYDOMAINS_SEPARATOR))) {</span>
+<span class="nc" id="L118">				domains.add(domain.trim());</span>
+<span class="nc" id="L119">			}</span>
+<span class="nc" id="L120">			UIModel.INSTANCE.setRelayDomains(domains);</span>
+		}
+
+		// Host binding for GUI
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		if (bindAddress != null) {</span>
+<span class="nc" id="L125">			UIModel.INSTANCE.setHost(bindAddress);</span>
+		}
+<span class="nc" id="L127">	}</span>
+
+	/**
+	 * Displays the app's usage in the standard output.
+	 */
+	public void displayUsage() {
+<span class="nc" id="L133">		HelpFormatter formatter = new HelpFormatter();</span>
+<span class="nc" id="L134">		formatter.printHelp(String.format(Locale.US, &quot;java -jar %s [OPTION]...&quot;, getJarName()), options);</span>
+<span class="nc" id="L135">	}</span>
+
+	/**
+	 * @return whether or not the SMTP server must be started automatically at launch.
+	 */
+	public boolean shouldStartServerAtLaunch() {
+<span class="nc" id="L141">		return startServerAtLaunch;</span>
+	}
+
+	/**
+	 * @return whether or not the SMTP server must be running without a GUI, only if started at launch (if {@code shouldStartServerAtLaunch()} returns true}).
+	 * @see #shouldStartServerAtLaunch
+	 */
+	public boolean shouldStartInBackground() {
+<span class="nc bnc" id="L149" title="All 4 branches missed.">		return startServerAtLaunch &amp;&amp; backgroundStart;</span>
+	}
+
+	/**
+	 * @return the port, as specified by the user, or a {@code null} string if unspecified.
+	 */
+	public String getPort() {
+<span class="nc" id="L156">		return port;</span>
+	}
+
+	/**
+	 * @return the bind address, as specified by the user, or a {@code null} string if unspecified.
+	 */
+	public String getBindAddress() {
+<span class="nc" id="L163">		return bindAddress;</span>
+	}
+
+	/**
+	 * @return the output directory, as specified by the user, or a {@code null} string if unspecified.
+	 */
+	public String getOutputDirectory() {
+<span class="nc" id="L170">		return outputDirectory;</span>
+	}
+
+	/**
+	 * @return whether or not the SMTP server should disable the persistence in order to avoid the overhead that it adds.
+	 * This is particularly useful when we launch performance tests that massively send emails.
+	 */
+	public boolean memoryModeEnabled() {
+<span class="fc" id="L178">		return memoryModeEnabled;</span>
+	}
+
+	/**
+	 * @return the name of executable used for viewing eml files, as specified by the user, or a {@code null} string if unspecified.
+	 */
+	public String getEmlViewer() {
+<span class="nc" id="L185">		return emlViewer;</span>
+	}
+
+	/**
+	 * @return the file name of the program.
+	 */
+	private String getJarName() {
+<span class="nc" id="L192">		return new java.io.File(</span>
+<span class="nc" id="L193">				ArgsHandler.class.getProtectionDomain()</span>
+<span class="nc" id="L194">				.getCodeSource()</span>
+<span class="nc" id="L195">				.getLocation()</span>
+<span class="nc" id="L196">				.getPath())</span>
+<span class="nc" id="L197">		.getName();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>LastMailPane xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
@@ -23,7 +23,7 @@
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_javadoccomment"> * @author Nilhcem</em>
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * @since 1.0</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/tab/LastMailPane.html">LastMailPane</a> <strong class="jxr_keyword">implements</strong> Observer {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="LastMailPane" href="../../../../../com/nilhcem/fakesmtp/gui/tab/LastMailPane.html#LastMailPane">LastMailPane</a> <strong class="jxr_keyword">implements</strong> Observer {
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JScrollPane lastMailPane = <strong class="jxr_keyword">new</strong> JScrollPane();
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> JTextArea lastMailArea = <strong class="jxr_keyword">new</strong> JTextArea();
@@ -31,7 +31,7 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">	 * Creates the text area and disables the possibility to edit it.</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">public</strong> <a href="../../../../../com/nilhcem/fakesmtp/gui/tab/LastMailPane.html">LastMailPane</a>() {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">public</strong> <a name="LastMailPane" href="../../../../../com/nilhcem/fakesmtp/gui/tab/LastMailPane.html#LastMailPane">LastMailPane</a>() {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  		lastMailArea.setEditable(false);
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  		lastMailPane.getViewport().add(lastMailArea, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	}
@@ -60,16 +60,16 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Override
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">synchronized</strong> <strong class="jxr_keyword">void</strong> update(Observable o, Object data) {
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">if</strong> (o instanceof MailSaver) {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			EmailModel model = (EmailModel) data;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">if</strong> (o instanceof <a name="MailSaver" href="../../../../../com/nilhcem/fakesmtp/server/MailSaver.html#MailSaver">MailSaver</a>) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			EmailModel model = (<a name="EmailModel" href="../../../../../com/nilhcem/fakesmtp/model/EmailModel.html#EmailModel">EmailModel</a>) data;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  			lastMailArea.setText(model.getEmailStr());
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof ClearAllButton) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof <a name="ClearAllButton" href="../../../../../com/nilhcem/fakesmtp/gui/info/ClearAllButton.html#ClearAllButton">ClearAllButton</a>) {
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			lastMailArea.setText(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2014. All rights reserved.</div>
+<div id="footer">© 2025</div>
 </body>
 </html>

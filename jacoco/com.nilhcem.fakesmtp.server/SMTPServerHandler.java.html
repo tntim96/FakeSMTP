@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SMTPServerHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Fake SMTP</a> &gt; <a href="index.source.html" class="el_package">com.nilhcem.fakesmtp.server</a> &gt; <span class="el_source">SMTPServerHandler.java</span></div><h1>SMTPServerHandler.java</h1><pre class="source lang-java linenums">package com.nilhcem.fakesmtp.server;
+
+import java.net.InetAddress;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.subethamail.smtp.server.SMTPServer;
+import com.nilhcem.fakesmtp.core.exception.BindPortException;
+import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
+
+/**
+ * Starts and stops the SMTP server.
+ *
+ * @author Nilhcem
+ * @since 1.0
+ */
+<span class="fc" id="L17">public enum SMTPServerHandler {</span>
+<span class="fc" id="L18">	INSTANCE;</span>
+
+<span class="fc" id="L20">	private static final Logger LOGGER = LoggerFactory.getLogger(SMTPServerHandler.class);</span>
+<span class="fc" id="L21">	private final MailSaver mailSaver = new MailSaver();</span>
+<span class="fc" id="L22">	private final MailListener myListener = new MailListener(mailSaver);</span>
+	private SMTPServer smtpServer;
+
+<span class="fc" id="L25">	SMTPServerHandler() {</span>
+<span class="fc" id="L26">	}</span>
+
+	/**
+	 * Starts the server on the port and address specified in parameters.
+	 *
+	 * @param port the SMTP port to be opened.
+	 * @param bindAddress the address to bind to. null means bind to all.
+	 * @throws BindPortException when the port can't be opened.
+	 * @throws OutOfRangePortException when port is out of range.
+	 * @throws IllegalArgumentException when port is out of range.
+	 */
+	public void startServer(int port, InetAddress bindAddress) throws BindPortException, OutOfRangePortException {
+<span class="fc" id="L38">		LOGGER.debug(&quot;Starting server on port {}&quot;, port);</span>
+		try {
+<span class="fc" id="L40">                        SMTPServer.Builder builder = new SMTPServer.Builder()</span>
+<span class="fc" id="L41">                            .authenticationHandlerFactory(new SMTPAuthHandlerFactory())</span>
+<span class="fc" id="L42">                            .simpleMessageListener(myListener)</span>
+<span class="fc" id="L43">                            .port(port);</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">                        if (bindAddress != null) {</span>
+<span class="fc" id="L45">                              builder.bindAddress(bindAddress);</span>
+                        }
+<span class="fc" id="L47">                        smtpServer = builder</span>
+<span class="fc" id="L48">                            .build();</span>
+<span class="fc" id="L49">			smtpServer.start();</span>
+<span class="fc" id="L50">		} catch (RuntimeException exception) {</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">			if (exception.getMessage().contains(&quot;BindException&quot;)) { // Can't open port</span>
+<span class="nc" id="L52">				LOGGER.error(&quot;{}. Port {}&quot;, exception.getMessage(), port);</span>
+<span class="nc" id="L53">				throw new BindPortException(exception, port);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">			} else if (exception.getMessage().contains(&quot;out of range&quot;)) { // Port out of range</span>
+<span class="fc" id="L55">				LOGGER.error(&quot;Port {} out of range.&quot;, port);</span>
+<span class="fc" id="L56">				throw new OutOfRangePortException(exception, port);</span>
+			} else { // Unknown error
+<span class="nc" id="L58">				LOGGER.error(&quot;&quot;, exception);</span>
+<span class="nc" id="L59">				throw exception;</span>
+			}
+<span class="fc" id="L61">		}</span>
+<span class="fc" id="L62">	}</span>
+
+	/**
+	 * Stops the server.
+	 * &lt;p&gt;
+	 * If the server is not started, does nothing special.
+	 * &lt;/p&gt;
+	 */
+	public void stopServer() {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		if (smtpServer.isRunning()) {</span>
+<span class="nc" id="L72">			LOGGER.debug(&quot;Stopping server&quot;);</span>
+<span class="nc" id="L73">			smtpServer.stop();</span>
+		}
+<span class="fc" id="L75">	}</span>
+
+	/**
+	 * Returns the {@code MailSaver} object.
+	 *
+	 * @return the {@code MailSaver} object.
+	 */
+	public MailSaver getMailSaver() {
+<span class="nc" id="L83">		return mailSaver;</span>
+	}
+
+	/**
+	 * Returns the {@code SMTPServer} object.
+     *
+     * @return the {@code SMTPServer} object.
+	 */
+	public SMTPServer getSmtpServer() {
+<span class="nc" id="L92">		return smtpServer;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

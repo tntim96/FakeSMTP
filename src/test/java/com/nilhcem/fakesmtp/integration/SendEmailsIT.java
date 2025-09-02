@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//@Ignore("This needs to be run manually with a running instance of FakeSMTP")
+@Ignore("This needs to be run manually with a running instance of FakeSMTP")
 public final class SendEmailsIT {
 
 	private static final Logger logger = LoggerFactory.getLogger(SendEmailsIT.class);

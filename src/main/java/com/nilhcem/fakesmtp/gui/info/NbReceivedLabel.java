@@ -1,17 +1,14 @@
 package com.nilhcem.fakesmtp.gui.info;
 
-import java.awt.Font;
-import java.util.Observable;
-import java.util.Observer;
-
-import javax.swing.JLabel;
-
 import com.nilhcem.fakesmtp.model.UIModel;
 import com.nilhcem.fakesmtp.server.MailSaver;
-
-import com.apple.eawt.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Label class to display the number of received emails.
@@ -74,12 +71,25 @@ public final class NbReceivedLabel implements Observer {
 	}
 
 	private void updateDockIconBadge(String badgeValue) {
+		// No-op in headless or unsupported environments
+		if (GraphicsEnvironment.isHeadless() || !Taskbar.isTaskbarSupported()) {
+			return;
+		}
+
+		Taskbar taskbar = Taskbar.getTaskbar();
 		try {
-			Application.getApplication().setDockIconBadge(badgeValue);
-		} catch (RuntimeException e) {
-			LOGGER.debug("Error: {} - This is probably because we run on a non-Mac platform and these components are not implemented", e.getMessage());
+			// Prefer text badges when supported; pass null to clear the badge
+			if (taskbar.isSupported(Taskbar.Feature.ICON_BADGE_TEXT)) {
+				taskbar.setIconBadge(badgeValue);
+			} else if (taskbar.isSupported(Taskbar.Feature.ICON_BADGE_NUMBER)) {
+				// Some platforms accept only numbers: pass a numeric string or null
+				String numeric = (badgeValue != null && badgeValue.matches("\\d+")) ? badgeValue : null;
+				taskbar.setIconBadge(numeric);
+			}
+		} catch (UnsupportedOperationException | SecurityException e) {
+			LOGGER.debug("Dock badging not supported/allowed: {}", e.getMessage());
 		} catch (Exception e) {
-			LOGGER.error("", e);
+			LOGGER.error("Failed to set dock badge", e);
 		}
 	}
 }

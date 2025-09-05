@@ -110,7 +110,7 @@
 <li>Map volume for received mails:
 <pre class="prettyprint"><code> --privileged=true  -v /mail-data:/output</code></pre>
 <p>Full command</p></li>
-<li>Foward fakesmtp:25 to host port 250,</li>
+<li>Forward fakesmtp:25 to host port 250,</li>
 <li>mount host folder /home/fakesmtp/mail as container folder /output
 <pre class="prettyprint"><code> docker run -ti -d -p 250:25 --privileged=true -v /home/fakesmtp/mail:/output fakesmtp</code></pre></li></ul></section><section><a id="Alternatives"></a>
 <h2>Alternatives</h2>

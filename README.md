@@ -156,10 +156,36 @@ Configure container
 
 Full command
 
-* Foward fakesmtp:25 to host port 250,
+* Forward fakesmtp:25 to host port 250,
 * mount host folder /home/fakesmtp/mail as container folder /output
 
     `docker run -ti -d -p 250:25 --privileged=true -v /home/fakesmtp/mail:/output fakesmtp`
+
+
+Release
+----------
+
+    mvn versions:set -DnewVersion=2.1.1
+
+Update all references to the version 2.1.1
+
+    mvn verify
+    git add --all
+    git commit -m "Release version 2.1.1"
+    git tag -a v2.1.1 -m "Release version 2.1.1"
+    git push origin master
+    git push --tags
+
+Create a release on GitHub
+
+    git push origin master --tags
+
+Update the github website
+
+    mvn site
+    git checkout gh-pages
+    cp -r target/site/* .
+    git add --all
 
 
 Contact me

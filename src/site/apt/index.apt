@@ -106,7 +106,7 @@ the following example will autostart the SMTP server on the port 2525 and bound 
 
  Full command
 
- * Foward fakesmtp:25 to host port 250,
+ * Forward fakesmtp:25 to host port 250,
 
  * mount host folder /home/fakesmtp/mail as container folder /output
 

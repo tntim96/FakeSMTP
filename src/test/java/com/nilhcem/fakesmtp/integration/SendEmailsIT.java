@@ -2,7 +2,8 @@ package com.nilhcem.fakesmtp.integration;
 
 import com.nilhcem.fakesmtp.core.Configuration;
 import com.nilhcem.fakesmtp.core.test.TestConfig;
-import org.apache.commons.mail.*;
+import org.apache.commons.mail2.core.EmailException;
+import org.apache.commons.mail2.jakarta.*;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;

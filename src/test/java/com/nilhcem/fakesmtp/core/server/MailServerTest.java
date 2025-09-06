@@ -1,19 +1,24 @@
 package com.nilhcem.fakesmtp.core.server;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import com.nilhcem.fakesmtp.model.EmailModel;
+import com.nilhcem.fakesmtp.model.UIModel;
+import com.nilhcem.fakesmtp.server.MailSaver;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Observable;
 import java.util.Observer;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.nilhcem.fakesmtp.core.I18n;
-import com.nilhcem.fakesmtp.model.EmailModel;
-import com.nilhcem.fakesmtp.model.UIModel;
-import com.nilhcem.fakesmtp.server.MailSaver;
 
 public class MailServerTest {
 	private static MailSaver saver;
@@ -86,8 +91,8 @@ public class MailServerTest {
 		return sb.toString();
 	}
 
-	private InputStream fromString(String str) throws UnsupportedEncodingException {
-		byte[] bytes = str.getBytes(I18n.UTF8);
+	private InputStream fromString(String str) {
+		byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
 		return new ByteArrayInputStream(bytes);
 	}
 }

@@ -6,12 +6,13 @@ import ch.qos.logback.classic.Logger;
 import com.nilhcem.fakesmtp.model.UIModel;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,7 +92,7 @@ public enum ArgsHandler {
 	 * @throws ParseException when arguments are invalid.
 	 */
 	public void handleArgs(String[] args) throws ParseException {
-		CommandLineParser parser = new GnuParser();
+		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = parser.parse(options, args);
 
 		outputDirectory = cmd.getOptionValue(OPT_EMAILS_DIR_SHORT);
@@ -130,9 +131,13 @@ public enum ArgsHandler {
 	 * Displays the app's usage in the standard output.
 	 */
 	public void displayUsage() {
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp(String.format(Locale.US, "java -jar %s [OPTION]...", getJarName()), options);
-	}
+		HelpFormatter formatter = HelpFormatter.builder().get();
+		try {
+                	formatter.printHelp(String.format(Locale.US, "java -jar %s [OPTION]...", getJarName()), null, options, null, true);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+        }
 
 	/**
 	 * @return whether or not the SMTP server must be started automatically at launch.

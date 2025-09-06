@@ -105,6 +105,7 @@ and start the server on port `2525`.
 
     java -jar fakeSMTP-VERSION.jar -p 2525 -s
 
+Temporarily comment out the `@Ignore` in `SendEmailsIT`
 You can then run the following command:
 
     mvn integration-test

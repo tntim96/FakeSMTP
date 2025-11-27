@@ -255,7 +255,7 @@
             <plugin>
               <groupId>com.github.spotbugs</groupId>
               <artifactId>spotbugs-maven-plugin</artifactId>
-              <version>4.9.8.1</version>
+              <version>4.9.8.2</version>
               <configuration>
                 <threshold>High</threshold>
                 <effort>Default</effort>
@@ -294,7 +294,7 @@
             <plugin>
               <groupId>org.codehaus.mojo</groupId>
               <artifactId>taglist-maven-plugin</artifactId>
-              <version>3.2.1</version>
+              <version>3.2.2</version>
             </plugin>
 
             <!-- JXR: Browse the source-code from the website -->

@@ -175,22 +175,34 @@
 
 			<!-- Docker -->
 			<plugin>
-				<groupId>com.spotify</groupId>
+				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
-				<version>1.2.2</version>
+				<version>0.48.1</version>
 				<configuration>
-					<imageName>${docker.image}</imageName>
-					<dockerDirectory>src/main/docker</dockerDirectory>
-					<resources>
-						<resource>
-							<targetPath>/</targetPath>
-							<directory>${project.build.directory}</directory>
-							<include>${project.build.finalName}.jar</include>
-						</resource>
-					</resources>
+					<images>
+						<image>
+							<name>${docker.image}</name>
+							<build>
+								<dockerFileDir>${project.basedir}/src/main/docker</dockerFileDir>
+								<assembly>
+									<layers>
+										<layer>
+											<files>
+												<file>
+													<source>${project.build.directory}/${project.build.finalName}.jar</source>
+													<outputDirectory>/</outputDirectory>
+												</file>
+											</files>
+										</layer>
+									</layers>
+								</assembly>
+							</build>
+						</image>
+					</images>
 				</configuration>
 			</plugin>
-                  <plugin>
+
+			<plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.14</version>

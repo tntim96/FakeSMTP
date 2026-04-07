@@ -1,6 +1,10 @@
 FakeSMTP
 ========
 
+[![Build Status](https://github.com/tntim96/FakeSMTP/workflows/Java-CI/badge.svg)](https://github.com/tntim96/FakeSMTP/actions?query=workflow%3A%22Java-CI%22)
+[![Release](https://img.shields.io/github/v/release/tntim96/FakeSMTP.svg?logo=github)](https://github.com/tntim96/FakeSMTP/releases/latest)
+
+
 FakeSMTP is a Free Fake SMTP Server with GUI for testing emails in applications easily.
 It is written in Java.
 
@@ -166,14 +170,14 @@ Full command
 Release
 ----------
 
-    mvn versions:set -DnewVersion=2.1.2-SNAPSHOT
+    mvn versions:set -DnewVersion=2.1.2
 
-Update all references to the version 2.1.2-SNAPSHOT
+Update all references to the version 2.1.2
 
     mvn verify
     git add --all
-    git commit -m "Release version 2.1.2-SNAPSHOT"
-    git tag -a v2.1.2-SNAPSHOT -m "Release version 2.1.2-SNAPSHOT"
+    git commit -m "Release version 2.1.2"
+    git tag -a v2.1.2 -m "Release version 2.1.2"
     git push origin master
     git push --tags
 

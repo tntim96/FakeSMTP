@@ -170,14 +170,14 @@ Full command
 Release
 ----------
 
-    mvn versions:set -DnewVersion=2.1.2
+    mvn versions:set -DnewVersion=2.1.3-SNAPSHOT
 
-Update all references to the version 2.1.2
+Update all references to the version 2.1.3-SNAPSHOT
 
     mvn verify
     git add --all
-    git commit -m "Release version 2.1.2"
-    git tag -a v2.1.2 -m "Release version 2.1.2"
+    git commit -m "Release version 2.1.3-SNAPSHOT"
+    git tag -a v2.1.3-SNAPSHOT -m "Release version 2.1.3-SNAPSHOT"
     git push origin master
     git push --tags
 

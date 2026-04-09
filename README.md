@@ -24,7 +24,7 @@ It is licensed under the very free BSD or GPL license, whichever you prefer.
 Requirements
 ------------
 
-You need Java JVM 11 or newer installed on your machine.
+You need Java JVM 17 or newer installed on your machine.
 
 If you are on a "Unix-like" machine (Mac, GNU/Linux, BSD...), you may have
 to be "root" to start the port `25`, otherwise, try another port >= `1024`.

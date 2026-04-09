@@ -1,16 +1,17 @@
 package com.nilhcem.fakesmtp.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.nilhcem.fakesmtp.core.exception.BindPortException;
 import com.nilhcem.fakesmtp.core.exception.InvalidHostException;
 import com.nilhcem.fakesmtp.core.exception.InvalidPortException;
 import com.nilhcem.fakesmtp.core.exception.OutOfRangePortException;
 import com.nilhcem.fakesmtp.core.test.TestConfig;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UIModelTest {
 	@Test
@@ -25,17 +26,17 @@ public class UIModelTest {
 		assertEquals(0, UIModel.INSTANCE.getNbMessageReceived());
 	}
 
-	@Test(expected = InvalidPortException.class)
+	@Test
 	public void testInvalidPort() throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
 		UIModel.INSTANCE.setPort("INVALID");
-		UIModel.INSTANCE.toggleButton();
+		assertThrows(InvalidPortException.class, () -> UIModel.INSTANCE.toggleButton());
 	}
 
-	@Test(expected = InvalidHostException.class)
+	@Test
 	public void testInvalidHost() throws BindPortException, OutOfRangePortException, InvalidPortException, InvalidHostException {
 		UIModel.INSTANCE.setHost("INVALID");
                 UIModel.INSTANCE.setPort(Integer.toString(TestConfig.PORT_UNIT_TESTS));
-		UIModel.INSTANCE.toggleButton();
+		assertThrows(InvalidHostException.class, () -> UIModel.INSTANCE.toggleButton());
 	}
 
 	@Test

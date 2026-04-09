@@ -1,21 +1,21 @@
 package com.nilhcem.fakesmtp.core;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import java.util.Locale;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class I18nTest {
 	private static Locale defaultLocale;
 
-	@BeforeClass
+	@BeforeAll
 	public static void initLocale() {
 		defaultLocale = Locale.getDefault();
 		Locale.setDefault(Locale.TAIWAN);
 	}
 
-	@AfterClass
+	@AfterAll
 	public static void resetLocale() {
 		Locale.setDefault(defaultLocale);
 	}

@@ -9,6 +9,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -30,7 +32,7 @@ import java.util.regex.Pattern;
  * @author Nilhcem
  * @since 1.0
  */
-public final class MailSaver extends Observable {
+public final class MailSaver {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MailSaver.class);
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -38,6 +40,7 @@ public final class MailSaver extends Observable {
 	private static final Pattern SUBJECT_PATTERN = Pattern.compile("^Subject: (.*)$");
 
 	private final SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyhhmmssSSS");
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Saves incoming email in file system and notifies observers.
@@ -45,7 +48,7 @@ public final class MailSaver extends Observable {
 	 * @param from the user who send the email.
 	 * @param to the recipient of the email.
 	 * @param data an InputStream object containing the email.
-	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers to see which observers will be notified
+	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers(Observable)  to see which observers will be notified
 	 */
 	public void saveEmailAndNotify(String from, String to, InputStream data) {
 		List<String> relayDomains = UIModel.INSTANCE.getRelayDomains();
@@ -79,8 +82,7 @@ public final class MailSaver extends Observable {
 			model.setReceivedDate(new Date());
 			model.setFilePath(filePath);
 
-			setChanged();
-			notifyObservers(model);
+			support.firePropertyChange("email", null, model);
 		}
 	}
 
@@ -104,6 +106,33 @@ public final class MailSaver extends Observable {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Adds a property change listener to the observer list.
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	/**
+	 * Removes a property change listener from the observer list.
+	 *
+	 * @param listener the listener to be removed.
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		support.removePropertyChangeListener(listener);
+	}
+
+	/**
+	 * Returns the number of observers.
+	 *
+	 * @return the number of property change listeners.
+	 */
+	public int countObservers() {
+		return support.getPropertyChangeListeners().length;
 	}
 
 	/**
@@ -159,7 +188,7 @@ public final class MailSaver extends Observable {
 			return null;
 		}
 		String filePath = String.format("%s%s%s", UIModel.INSTANCE.getSavePath(), File.separator,
-				dateFormat.format(new Date()));
+		    dateFormat.format(new Date()));
 
 		// Create file
 		int i = 0;
@@ -176,7 +205,7 @@ public final class MailSaver extends Observable {
 
 		// Copy String to file
 		try {
-			FileUtils.writeStringToFile(file, mailContent);
+			FileUtils.writeStringToFile(file, mailContent, Charset.defaultCharset());
 		} catch (IOException e) {
 			// If we can't save file, we display the error in the SMTP logs
 			Logger smtpLogger = LoggerFactory.getLogger(org.subethamail.smtp.server.Session.class);
@@ -197,10 +226,10 @@ public final class MailSaver extends Observable {
 
 			String line;
 			while ((line = reader.readLine()) != null) {
-				 Matcher matcher = SUBJECT_PATTERN.matcher(line);
-				 if (matcher.matches()) {
-					 return matcher.group(1);
-				 }
+				Matcher matcher = SUBJECT_PATTERN.matcher(line);
+				if (matcher.matches()) {
+					return matcher.group(1);
+				}
 			}
 		} catch (IOException e) {
 			LOGGER.error("", e);

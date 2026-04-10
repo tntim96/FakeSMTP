@@ -9,8 +9,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * Text field in which will be written the desired SMTP port.
@@ -18,9 +19,10 @@ import java.util.Observer;
  * @author Nilhcem
  * @since 1.0
  */
-public final class PortTextField extends Observable implements Observer {
+public final class PortTextField implements PropertyChangeListener {
 
 	private final JTextField portTextField = new JTextField();
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates the port field object and adds a listener on change to alert the presentation model.
@@ -56,8 +58,7 @@ public final class PortTextField extends Observable implements Observer {
 		portTextField.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setChanged();
-				notifyObservers();
+				support.firePropertyChange("action", null, null);
 			}
 		});
 	}
@@ -83,6 +84,15 @@ public final class PortTextField extends Observable implements Observer {
 	}
 
 	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	/**
 	 * Enables or disables the port text field.
 	 * <p>
 	 * When the element will receive an action from the {@link StartServerButton} object,
@@ -90,12 +100,11 @@ public final class PortTextField extends Observable implements Observer {
 	 * when the server is already launched.
 	 * </p>
 	 *
-	 * @param o the observable element which will notify this class.
-	 * @param arg optional parameters (not used).
+	 * @param evt the property change event containing the source.
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof StartServerButton) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof StartServerButton) {
 			portTextField.setEnabled(!UIModel.INSTANCE.isStarted());
 		}
 	}

@@ -2,8 +2,9 @@ package com.nilhcem.fakesmtp.gui.info;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -19,10 +20,10 @@ import com.nilhcem.fakesmtp.model.UIModel;
  * @author Nilhcem
  * @since 1.0
  */
-public final class StartServerButton extends Observable implements Observer {
+public final class StartServerButton implements PropertyChangeListener {
 	private final I18n i18n = I18n.INSTANCE;
-
 	private final JButton button = new JButton(i18n.get("startsrv.start"));
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates a start button to start the SMTP server.
@@ -40,7 +41,7 @@ public final class StartServerButton extends Observable implements Observer {
 	}
 
 	/**
-	 * Switches the text inside the button and calls the PortTextField observer to enable/disable the port field.
+	 * Switches the text inside the button and notifies listeners to enable/disable the port field.
 	 *
 	 * @see PortTextField
 	 */
@@ -63,8 +64,7 @@ public final class StartServerButton extends Observable implements Observer {
 			button.setText(i18n.get("startsrv.started"));
 			button.setEnabled(false);
 		}
-		setChanged();
-		notifyObservers();
+		support.firePropertyChange("started", null, UIModel.INSTANCE.isStarted());
 	}
 
 	/**
@@ -77,19 +77,28 @@ public final class StartServerButton extends Observable implements Observer {
 	}
 
 	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	/**
 	 * Displays a message dialog displaying the error specified in parameter.
 	 *
 	 * @param error a string representing the error which will be displayed in a message dialog.
 	 */
 	private void displayError(String error) {
 		JOptionPane.showMessageDialog(button.getParent(), error,
-			String.format(i18n.get("startsrv.err.title"), Configuration.INSTANCE.get("application.name")),
-			JOptionPane.ERROR_MESSAGE);
+		    String.format(i18n.get("startsrv.err.title"), Configuration.INSTANCE.get("application.name")),
+		    JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof PortTextField) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof PortTextField) {
 			toggleButton();
 		}
 	}

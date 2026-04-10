@@ -6,8 +6,8 @@ import com.nilhcem.fakesmtp.server.MailSaver;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Scrolled text area where will be displayed the last received email.
@@ -15,7 +15,7 @@ import java.util.Observer;
  * @author Nilhcem
  * @since 1.0
  */
-public final class LastMailPane implements Observer {
+public final class LastMailPane implements PropertyChangeListener {
 
 	private final JScrollPane lastMailPane = new JScrollPane();
 	private final JTextArea lastMailArea = new JTextArea();
@@ -41,21 +41,22 @@ public final class LastMailPane implements Observer {
 	 * Updates the content of the text area.
 	 * <p>
 	 * This method will be called by an observable element.
-     * </p>
+	 * </p>
 	 * <ul>
-	 *   <li>If the observable is a {@link MailSaver} object, the text area will contain the content of the last received email;</li>
-	 *   <li>If the observable is a {@link ClearAllButton} object, the text area will be cleared.</li>
+	 *   <li>If the source is a {@link MailSaver} object, the text area will contain the content of the last received email;</li>
+	 *   <li>If the source is a {@link ClearAllButton} object, the text area will be cleared.</li>
 	 * </ul>
 	 *
-	 * @param o the observable element which will notify this class.
-	 * @param data optional parameters (an {@code EmailModel} object, for the case of a {@code MailSaver} observable).
+	 * @param evt the property change event containing the source and new data.
 	 */
 	@Override
-	public synchronized void update(Observable o, Object data) {
-		if (o instanceof MailSaver) {
-			EmailModel model = (EmailModel) data;
+	public synchronized void propertyChange(PropertyChangeEvent evt) {
+		Object source = evt.getSource();
+
+		if (source instanceof MailSaver) {
+			EmailModel model = (EmailModel) evt.getNewValue();
 			lastMailArea.setText(model.getEmailStr());
-		} else if (o instanceof ClearAllButton) {
+		} else if (source instanceof ClearAllButton) {
 			lastMailArea.setText("");
 		}
 	}

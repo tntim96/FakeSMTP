@@ -9,8 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * Button to clear all the information from the main panel.
@@ -22,10 +23,11 @@ import java.util.Observer;
  * @author Nilhcem
  * @since 1.0
  */
-public final class ClearAllButton extends Observable implements Observer {
+public final class ClearAllButton implements PropertyChangeListener {
 
 	private final I18n i18n = I18n.INSTANCE;
 	private final JButton button = new JButton(i18n.get("clearall.button"));
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates the "clear all" button"
@@ -41,19 +43,19 @@ public final class ClearAllButton extends Observable implements Observer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int answer = JOptionPane.showConfirmDialog(button.getParent(), i18n.get("clearall.delete.email"),
-					String.format(i18n.get("clearall.title"), Configuration.INSTANCE.get("application.name")),
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+				    String.format(i18n.get("clearall.title"), Configuration.INSTANCE.get("application.name")),
+				    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (answer == JOptionPane.CLOSED_OPTION) {
 					return;
 				}
 
 				synchronized (SMTPServerHandler.INSTANCE.getMailSaver().getLock()) {
-				    // Note: Should delete emails before calling observers, since observers will clean the model.
+					// Note: Should delete emails before calling observers, since observers will clean the model.
 					if (answer == JOptionPane.YES_OPTION) {
 						SMTPServerHandler.INSTANCE.getMailSaver().deleteEmails();
 					}
-				    setChanged();
-				    notifyObservers();
+					// Notify UI components to clear their views
+					support.firePropertyChange("clear", null, null);
 					button.setEnabled(false);
 				}
 			}
@@ -77,9 +79,18 @@ public final class ClearAllButton extends Observable implements Observer {
 	 * </p>
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof MailSaver && !button.isEnabled()) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof MailSaver && !button.isEnabled()) {
 			button.setEnabled(true);
 		}
+	}
+
+	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
 	}
 }

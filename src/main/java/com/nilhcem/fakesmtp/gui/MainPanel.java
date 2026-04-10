@@ -17,7 +17,6 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import java.util.Observable;
 
 /**
  * Provides the main panel of the application, which will contain all the components.
@@ -31,9 +30,9 @@ public final class MainPanel {
 
 	// Panel and layout
 	private final MigLayout layout = new MigLayout(
-		"", // Layout constraints
-		"[] 10 [] [] [grow,fill]", // Column constraints
-		"[] [] 5 [] 5 [grow,fill] []"); // Row constraints
+	    "", // Layout constraints
+	    "[] 10 [] [] [grow,fill]", // Column constraints
+	    "[] [] 5 [] 5 [grow,fill] []"); // Row constraints
 	private final JPanel mainPanel = new JPanel(layout);
 
 	// Directory chooser
@@ -71,7 +70,7 @@ public final class MainPanel {
 	 *
 	 * @param menu the menu bar which will notify the directory file chooser.
 	 */
-	public MainPanel(Observable menu) {
+	public MainPanel(MenuBar menu) {
 		assignLabelsToFields();
 		addObservers(menu);
 		buildGUI();
@@ -102,32 +101,32 @@ public final class MainPanel {
 	 *
 	 * @param menu the menu bar which will notify the directory file chooser.
 	 */
-	private void addObservers(Observable menu) {
+	private void addObservers(MenuBar menu) {
 		// When we want to select a directory
-		menu.addObserver(dirChooser);
-		saveMsgTextField.addObserver(dirChooser);
+		menu.addPropertyChangeListener(dirChooser);
+		saveMsgTextField.addPropertyChangeListener(dirChooser);
 
 		// When we click on "start server" button
-		startServerBtn.addObserver(portText);
+		startServerBtn.addPropertyChangeListener(portText);
 
 		// When we press "Enter" on the PortTextField
-		portText.addObserver(startServerBtn);
+		portText.addPropertyChangeListener(startServerBtn);
 
 		// Once we chose a directory
-		dirChooser.addObserver(saveMsgTextField);
+		dirChooser.addPropertyChangeListener(saveMsgTextField);
 
 		// When a message is received
 		MailSaver mailSaver = SMTPServerHandler.INSTANCE.getMailSaver();
-		mailSaver.addObserver(nbReceivedLabel);
-		mailSaver.addObserver(mailsListPane);
-		mailSaver.addObserver(lastMailPane);
-		mailSaver.addObserver(clearAll);
+		mailSaver.addPropertyChangeListener(nbReceivedLabel);
+		mailSaver.addPropertyChangeListener(mailsListPane);
+		mailSaver.addPropertyChangeListener(lastMailPane);
+		mailSaver.addPropertyChangeListener(clearAll);
 
 		// When we click on "clear all"
-		clearAll.addObserver(nbReceivedLabel);
-		clearAll.addObserver(mailsListPane);
-		clearAll.addObserver(logsPane);
-		clearAll.addObserver(lastMailPane);
+		clearAll.addPropertyChangeListener(nbReceivedLabel);
+		clearAll.addPropertyChangeListener(mailsListPane);
+		clearAll.addPropertyChangeListener(logsPane);
+		clearAll.addPropertyChangeListener(lastMailPane);
 	}
 
 	/**
@@ -200,8 +199,8 @@ public final class MainPanel {
 
 	/**
 	 * Returns reference to saveMsgTextField. Used for saving last values to file
-     *
-     * @return reference to saveMsgTextField. Used for saving last values to file
+	 *
+	 * @return reference to saveMsgTextField. Used for saving last values to file
 	 */
 	public SaveMsgField getSaveMsgTextField() {
 		return saveMsgTextField;

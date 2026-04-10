@@ -10,7 +10,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * Provides the menu bar of the application.
@@ -18,11 +19,12 @@ import java.util.Observable;
  * @author Nilhcem
  * @since 1.0
  */
-public final class MenuBar extends Observable {
+public final class MenuBar {
 
 	private final I18n i18n = I18n.INSTANCE;
 	private final JMenuBar menuBar = new JMenuBar();
 	private final MainFrame mainFrame;
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates the menu bar and the different menus (file / edit / help).
@@ -44,6 +46,15 @@ public final class MenuBar extends Observable {
 	 */
 	public JMenuBar get() {
 		return menuBar;
+	}
+
+	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
 	}
 
 	/**
@@ -86,8 +97,7 @@ public final class MenuBar extends Observable {
 			mailsLocation.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					setChanged();
-					notifyObservers();
+					support.firePropertyChange("locationClick", null, null);
 				}
 			});
 		}

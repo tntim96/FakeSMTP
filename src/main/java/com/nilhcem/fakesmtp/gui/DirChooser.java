@@ -1,9 +1,10 @@
 package com.nilhcem.fakesmtp.gui;
 
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.JFileChooser;
 import com.nilhcem.fakesmtp.core.Configuration;
 import com.nilhcem.fakesmtp.core.I18n;
@@ -20,10 +21,11 @@ import com.nilhcem.fakesmtp.model.UIModel;
  * @author Nilhcem
  * @since 1.0
  */
-public final class DirChooser extends Observable implements Observer {
+public final class DirChooser implements PropertyChangeListener {
 
 	private final JFileChooser dirChooser = new JFileChooser();
 	private final Component parent;
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates a {@code JFileChooser} component and sets it to be for directories only.
@@ -34,28 +36,37 @@ public final class DirChooser extends Observable implements Observer {
 		this.parent = parent;
 		dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		dirChooser.setDialogTitle(String.format(I18n.INSTANCE.get("dirchooser.title"),
-			Configuration.INSTANCE.get("application.name")));
+		    Configuration.INSTANCE.get("application.name")));
 		dirChooser.setApproveButtonText(I18n.INSTANCE.get("dirchooser.approve.btn"));
 	}
 
 	/**
 	 * Opens the folder selection.
 	 * <p>
-	 * This method will be called by an {@code Observable} element:
-     * </p>
+	 * This method will be called by an {@code PropertyChangeListener} trigger:
+	 * </p>
 	 * <ul>
 	 *   <li>The {@link MenuBar};</li>
 	 *   <li>Or the {@link SaveMsgField}.</li>
 	 * </ul>
 	 *
-	 * @param o the observable element which will notify this class.
-	 * @param arg optional parameters (not used).
+	 * @param evt the property change event containing the source.
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof MenuBar || o instanceof SaveMsgField) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object source = evt.getSource();
+		if (source instanceof MenuBar || source instanceof SaveMsgField) {
 			openFolderSelection();
 		}
+	}
+
+	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
 	}
 
 	/**
@@ -74,8 +85,7 @@ public final class DirChooser extends Observable implements Observer {
 			File selectedDir = dirChooser.getSelectedFile();
 			if (selectedDir != null) {
 				UIModel.INSTANCE.setSavePath(selectedDir.getAbsolutePath());
-				setChanged();
-				notifyObservers();
+				support.firePropertyChange("path", null, selectedDir.getAbsolutePath());
 			}
 		}
 	}

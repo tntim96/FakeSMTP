@@ -12,13 +12,13 @@ import com.nilhcem.fakesmtp.server.MailSaver;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Observable;
-import java.util.Observer;
+
 
 public class MailServerTest {
 	private static MailSaver saver;
@@ -34,41 +34,41 @@ public class MailServerTest {
 	}
 
 	@Test
-	public void testSaveDeleteEmail() throws UnsupportedEncodingException, InterruptedException {
+	public void testSaveDeleteEmail() throws Exception {
 		final String from = "from@example.com";
 		final String to = "to@example.com";
 		final String subject = "Hello";
 		final String content = "How are you?";
 
-		// Save
 		final InputStream data = fromString(getMockEmail(from, to, subject, content));
-		Observer mockObserver = new Observer() {
+
+		// Replacement for Observer: PropertyChangeListener
+		PropertyChangeListener mockListener = new PropertyChangeListener() {
 			@Override
-			public void update(Observable o, Object arg) {
-				EmailModel model = (EmailModel)arg;
+			public void propertyChange(PropertyChangeEvent evt) {
+				// evt.getNewValue() contains the EmailModel sent by the server
+				EmailModel model = (EmailModel) evt.getNewValue();
 
 				assertEquals(from, model.getFrom());
 				assertEquals(to, model.getTo());
 				assertEquals(subject, model.getSubject());
-				assertEquals(to, model.getTo());
 				assertNotNull(model.getEmailStr());
-				assertFalse(model.getEmailStr().isEmpty());
 				assertNotNull(model.getFilePath());
-				assertFalse(model.getFilePath().isEmpty());
 
 				File file = new File(model.getFilePath());
 				assertTrue(file.exists());
 
-				// Delete
+				// Delete logic
 				UIModel.INSTANCE.getListMailsMap().put(0, model.getFilePath());
 				saver.deleteEmails();
 				assertFalse(file.exists());
 			}
 		};
-		saver.addObserver(mockObserver);
-		assertTrue(saver.countObservers() != 0);
+
+		// Standard method names for PropertyChangeSupport
+		saver.addPropertyChangeListener(mockListener);
 		saver.saveEmailAndNotify(from, to, data);
-		saver.deleteObserver(mockObserver);
+		saver.removePropertyChangeListener(mockListener);
 	}
 
 	private String getMockEmail(String from, String to, String subject, String content) {

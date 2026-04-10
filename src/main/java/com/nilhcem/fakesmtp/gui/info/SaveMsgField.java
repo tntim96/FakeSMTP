@@ -9,8 +9,9 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * Text field in which will be written the path where emails will be automatically saved.
@@ -18,9 +19,10 @@ import java.util.Observer;
  * @author Nilhcem
  * @since 1.0
  */
-public final class SaveMsgField extends Observable implements Observer {
+public final class SaveMsgField implements PropertyChangeListener {
 
 	private final JTextField saveMsgField = new JTextField(UIModel.INSTANCE.getSavePath());
+	private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
 	/**
 	 * Creates a text field and adds a mouse listener, to display the directory chooser dialog when a user clicks on the field.
@@ -62,8 +64,7 @@ public final class SaveMsgField extends Observable implements Observer {
 				}
 
 				private void openFolderSelection() {
-					setChanged();
-					notifyObservers();
+					support.firePropertyChange("selection", null, null);
 				}
 			});
 		}
@@ -79,18 +80,26 @@ public final class SaveMsgField extends Observable implements Observer {
 	}
 
 	/**
+	 * Adds a property change listener (replaces addObserver).
+	 *
+	 * @param listener the listener to be added.
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		support.addPropertyChangeListener(listener);
+	}
+
+	/**
 	 * Updates the content of the JTextField with the new directory value.
 	 * <p>
 	 * Once a directory has been chosen by the {@link DirChooser}, the latter will
 	 * notify this class, so that it can update its content.
 	 * </p>
 	 *
-	 * @param o the observable element which will notify this class.
-	 * @param arg optional parameters (not used).
+	 * @param evt the property change event containing the source.
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof DirChooser) {
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() instanceof DirChooser) {
 			saveMsgField.setText(UIModel.INSTANCE.getSavePath());
 		}
 	}

@@ -21,12 +21,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Scrolled table where will be displayed every received email (one line for each email).
@@ -37,7 +37,7 @@ import java.util.Observer;
  * @author Nilhcem
  * @since 1.0
  */
-public final class MailsListPane implements Observer {
+public final class MailsListPane implements PropertyChangeListener {
 
 	private int nbElements = 0;
 	private Desktop desktop = null;
@@ -136,7 +136,7 @@ public final class MailsListPane implements Observer {
 					}
 				}
 			});
-        }
+		}
 
 		// Auto scroll tab to bottom when a new element is inserted
 		table.addComponentListener(new ComponentAdapter() {
@@ -182,22 +182,22 @@ public final class MailsListPane implements Observer {
 	 * Updates the content of the table.
 	 * <p>
 	 * This method will be called by an observable element.
-     * </p>
+	 * </p>
 	 * <ul>
-	 *   <li>If the observable is a {@link MailSaver} object, a new row will be added
+	 *   <li>If the source is a {@link MailSaver} object, a new row will be added
 	 *   to the table, and the {@link UIModel} will be updated;</li>
-	 *   <li>If the observable is a {@link ClearAllButton} object, all the cells
+	 *   <li>If the source is a {@link ClearAllButton} object, all the cells
 	 *   of the table will be removed, and the {@link UIModel} will be updated.</li>
 	 * </ul>
 	 *
-	 * @param o the observable element which will notify this class.
-	 * @param arg optional parameters (an {@code EmailModel} object, for the case of
-	 * a {@code MailSaver} observable) containing all the information about the email.
+	 * @param evt the property change event containing the source and new data.
 	 */
 	@Override
-	public void update(Observable o, Object arg) {
-		if (o instanceof MailSaver) {
-			EmailModel email = (EmailModel) arg;
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object source = evt.getSource();
+
+		if (source instanceof MailSaver) {
+			EmailModel email = (EmailModel) evt.getNewValue();
 			String subject;
 			try {
 				subject = MimeUtility.decodeText(email.getSubject());
@@ -208,7 +208,7 @@ public final class MailsListPane implements Observer {
 
 			model.addRow(new Object[] {dateFormat.format(email.getReceivedDate()), email.getFrom(), email.getTo(), subject});
 			UIModel.INSTANCE.getListMailsMap().put(nbElements++, email.getFilePath());
-		} else if (o instanceof ClearAllButton) {
+		} else if (source instanceof ClearAllButton) {
 			// Delete information from the map
 			UIModel.INSTANCE.getListMailsMap().clear();
 
@@ -230,7 +230,7 @@ public final class MailsListPane implements Observer {
 	 */
 	private void displayError(String error) {
 		JOptionPane.showMessageDialog(mailsListPane.getParent(), error,
-			String.format(i18n.get("mailslist.err.title"), Configuration.INSTANCE.get("application.name")),
-			JOptionPane.ERROR_MESSAGE);
+		    String.format(i18n.get("mailslist.err.title"), Configuration.INSTANCE.get("application.name")),
+		    JOptionPane.ERROR_MESSAGE);
 	}
 }

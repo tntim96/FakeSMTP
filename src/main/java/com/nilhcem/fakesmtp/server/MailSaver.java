@@ -3,6 +3,7 @@ package com.nilhcem.fakesmtp.server;
 import com.nilhcem.fakesmtp.core.ArgsHandler;
 import com.nilhcem.fakesmtp.core.Configuration;
 import com.nilhcem.fakesmtp.core.I18n;
+import com.nilhcem.fakesmtp.gui.MenuBar;
 import com.nilhcem.fakesmtp.model.EmailModel;
 import com.nilhcem.fakesmtp.model.UIModel;
 import org.apache.commons.io.FileUtils;
@@ -48,7 +49,7 @@ public final class MailSaver {
 	 * @param from the user who send the email.
 	 * @param to the recipient of the email.
 	 * @param data an InputStream object containing the email.
-	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers(Observable)  to see which observers will be notified
+	 * @see com.nilhcem.fakesmtp.gui.MainPanel#addObservers(MenuBar)  to see which observers will be notified
 	 */
 	public void saveEmailAndNotify(String from, String to, InputStream data) {
 		List<String> relayDomains = UIModel.INSTANCE.getRelayDomains();

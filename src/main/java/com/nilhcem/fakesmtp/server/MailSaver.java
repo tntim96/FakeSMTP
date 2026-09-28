@@ -19,11 +19,11 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 public final class MailSaver {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MailSaver.class);
-	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+	private static final String LINE_SEPARATOR = System.lineSeparator();
 	// This can be a static variable since it is Thread Safe
 	private static final Pattern SUBJECT_PATTERN = Pattern.compile("^Subject: (.*)$");
 
@@ -128,15 +128,6 @@ public final class MailSaver {
 	}
 
 	/**
-	 * Returns the number of observers.
-	 *
-	 * @return the number of property change listeners.
-	 */
-	public int countObservers() {
-		return support.getPropertyChangeListeners().length;
-	}
-
-	/**
 	 * Returns a lock object.
 	 * <p>
 	 * This lock will be used to make the application thread-safe, and
@@ -161,7 +152,7 @@ public final class MailSaver {
 	 */
 	private String convertStreamToString(InputStream is) {
 		final long lineNbToStartCopy = 4; // Do not copy the first 4 lines (received part)
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(I18n.UTF8)));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 		StringBuilder sb = new StringBuilder();
 
 		String line;

@@ -22,7 +22,7 @@
     <dependency>
       <groupId>com.miglayout</groupId>
       <artifactId>miglayout-swing</artifactId>
-      <version>11.5.1</version>
+      <version>11.5.2</version>
     </dependency>
 
     <!-- SubEtha SMTP: easy-to-use server-side SMTP library for Java -->
@@ -71,12 +71,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-email2-jakarta</artifactId>
-      <version>2.0.0-M1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.angus</groupId>
       <artifactId>angus-mail</artifactId>
       <version>2.0.5</version>
@@ -88,7 +82,7 @@
     <finalName>fakeSMTP-${project.version}</finalName>
 
     <plugins>
-      <!-- Use JDK 17 -->
+      <!-- Use JDK 21 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -278,7 +272,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.10.4.1</version>
+        <version>4.10.5.0</version>
         <configuration>
           <threshold>High</threshold>
           <effort>Default</effort>
